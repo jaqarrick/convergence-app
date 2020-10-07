@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "https://jaqarrick.github.io/convergence-client/static/css/main.c375b63e.chunk.css",
-    "main.js": "https://jaqarrick.github.io/convergence-client/static/js/main.3fe47d3c.chunk.js",
-    "main.js.map": "https://jaqarrick.github.io/convergence-client/static/js/main.3fe47d3c.chunk.js.map",
+    "main.js": "https://jaqarrick.github.io/convergence-client/static/js/main.cdc079a6.chunk.js",
+    "main.js.map": "https://jaqarrick.github.io/convergence-client/static/js/main.cdc079a6.chunk.js.map",
     "runtime-main.js": "https://jaqarrick.github.io/convergence-client/static/js/runtime-main.16bffabd.js",
     "runtime-main.js.map": "https://jaqarrick.github.io/convergence-client/static/js/runtime-main.16bffabd.js.map",
     "static/js/2.0fa9b8cc.chunk.js": "https://jaqarrick.github.io/convergence-client/static/js/2.0fa9b8cc.chunk.js",
     "static/js/2.0fa9b8cc.chunk.js.map": "https://jaqarrick.github.io/convergence-client/static/js/2.0fa9b8cc.chunk.js.map",
     "index.html": "https://jaqarrick.github.io/convergence-client/index.html",
-    "precache-manifest.ba4b019def5d56098f45e274980621a5.js": "https://jaqarrick.github.io/convergence-client/precache-manifest.ba4b019def5d56098f45e274980621a5.js",
+    "precache-manifest.2f3f9e691ca6a89eccafb7873f9d9926.js": "https://jaqarrick.github.io/convergence-client/precache-manifest.2f3f9e691ca6a89eccafb7873f9d9926.js",
     "service-worker.js": "https://jaqarrick.github.io/convergence-client/service-worker.js",
     "static/css/main.c375b63e.chunk.css.map": "https://jaqarrick.github.io/convergence-client/static/css/main.c375b63e.chunk.css.map",
     "static/js/2.0fa9b8cc.chunk.js.LICENSE.txt": "https://jaqarrick.github.io/convergence-client/static/js/2.0fa9b8cc.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.16bffabd.js",
     "static/js/2.0fa9b8cc.chunk.js",
     "static/css/main.c375b63e.chunk.css",
-    "static/js/main.3fe47d3c.chunk.js"
+    "static/js/main.cdc079a6.chunk.js"
   ]
 }

@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "367519953a03440bfd51d3bb9d9c4d6a",
+    "revision": "c5925aebe9e8cb042e7e93e5900b4eb3",
     "url": "https://jaqarrick.github.io/convergence-client/index.html"
   },
   {
-    "revision": "3f6dabea03476fce0695",
+    "revision": "d3b22813e2df32c75d83",
     "url": "https://jaqarrick.github.io/convergence-client/static/css/main.c375b63e.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://jaqarrick.github.io/convergence-client/static/js/2.0fa9b8cc.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "3f6dabea03476fce0695",
-    "url": "https://jaqarrick.github.io/convergence-client/static/js/main.3fe47d3c.chunk.js"
+    "revision": "d3b22813e2df32c75d83",
+    "url": "https://jaqarrick.github.io/convergence-client/static/js/main.cdc079a6.chunk.js"
   },
   {
     "revision": "213f3e46c0f06f06521a",
