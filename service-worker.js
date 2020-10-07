@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://jaqarrick.github.io/convergence-client/precache-manifest.19cfe463da3c5c964ae6f94b0b050747.js"
+  "https://jaqarrick.github.io/convergence-client/precache-manifest.6be827a8e9a8946f9c3836b5ec96b4f5.js"
 );
 
 self.addEventListener('message', (event) => {
