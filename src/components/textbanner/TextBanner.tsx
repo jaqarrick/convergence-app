@@ -20,7 +20,6 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({ direction }) => {
     scaledFrame.current = requestRef.current * 2
     if (_direction === "right") {
       if (scaledFrame.current < 28000) {
-        console.log(scaledFrame.current)
       } else if (scaledFrame.current >= 28000) {
         spanRef.current.style.transform = `translateX(0px)`
       }
