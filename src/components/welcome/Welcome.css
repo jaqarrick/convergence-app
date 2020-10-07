@@ -1,0 +1,82 @@
+.wrapper .welcome-container {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(255, 255, 255);
+}
+
+.wrapper .welcome-container .logo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.wrapper .welcome-container .logo-container img {
+  position: relative;
+  border-radius: 5px;
+  border: solid 1px #4a4aa7;
+  /* padding: 16px 18px 14px; */
+  -webkit-box-shadow: 0px 6px 0px #4d2ddb;
+  -moz-box-shadow: 0px 6px 0px #4d2ddb;
+  box-shadow: 0px 6px 0px #4d2ddb;
+}
+.wrapper .welcome-container .logo-container img:hover {
+  -webkit-box-shadow: 0px 2px 0px #4d2ddb;
+  -moz-box-shadow: 0px 2px 0px #4d2ddb;
+  box-shadow: 0px 2px 0px #4d2ddb;
+  position: relative;
+  top: 4px;
+}
+.wrapper .welcome-container .old-welcome {
+  display: none;
+}
+
+.room-list.active {
+  display: block;
+  height: 500px;
+  width: 300px;
+  border: solid red 1px;
+}
+.room-list {
+  display: none;
+}
+.room-list.active > ul > li {
+  cursor: pointer;
+  color: blue;
+  list-style-type: none;
+  margin-top: 5px;
+}
+.room-list.active > ul > li:hover {
+  text-decoration: underline;
+  color: rgb(253, 230, 100);
+}
+
+.wrapper .welcome-container .text-banner-container {
+  width: 100vw;
+  display: flex;
+  position: fixed;
+  top: 35%;
+}
+.wrapper .welcome-container .lower-container {
+  top: 48%;
+  transform: skew(30deg);
+}
+
+.wrapper .welcome-container .upper-container {
+  top: 40.5%;
+  transform: skew(30deg);
+}
+
+.wrapper .welcome-container .text-banner-container .text-container {
+  font-family: "StepsMonoRegular", Arial, Helvetica, sans-serif;
+  font-weight: nomral;
+  font-style: normal;
+  font-size: 75px;
+  cursor: default;
+}
+
+.wrapper .welcome-container .text-banner-container .text-container span {
+  white-space: nowrap;
+}
