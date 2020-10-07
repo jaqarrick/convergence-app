@@ -1,7 +1,7 @@
 {
   "name": "convergence-client",
+  "homepage": "https://jaqarrick.github.io/convergence-client/",
   "version": "0.1.0",
-  "homepage": "https://jaqarrick.github.io/convergence-client",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",

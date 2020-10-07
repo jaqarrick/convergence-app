@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router basename='/'>
+    <Router basename={process.env.PUBLIC_URL + "/"}>
       <App />
     </Router>
   </React.StrictMode>,
