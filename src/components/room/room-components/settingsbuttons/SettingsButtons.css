@@ -1,0 +1,23 @@
+.wrapper .room-container .settings-buttons {
+	position: absolute;
+	left: 12px;
+	top: 12px;
+	width: 246px;
+	height: 25px;
+	display: flex;
+	justify-content: space-evenly;
+	border: solid black 1px;
+	background-color: white;
+	box-shadow: 5px 5px black;
+}
+
+.wrapper .room-container .settings-buttons .settings-button {
+	border: solid black 1px;
+	width: auto;
+	flex: 1;
+	display: flex;
+	flex-wrap: column;
+	justify-content: center;
+	padding: 2px;
+	cursor: pointer;
+}

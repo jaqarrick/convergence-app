@@ -1,0 +1,49 @@
+.wrapper .room-container .settings-menu-container {
+	width: 246px;
+	position: absolute;
+	left: 12px;
+	top: 42px;
+	display: flex;
+	flex-direction: column;
+}
+
+.wrapper .room-container .settings-menu-container .menu-button {
+	width: auto;
+	height: 37px;
+	border: solid black 1px;
+	margin-top: 10px;
+	box-shadow: 5px 5px black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	position: relative;
+	transition: box-shadow 1s top 1s left 1s;
+	transition: all 0.2s ease 0s;
+	transition: background-color 0s;
+	top: 0;
+	left: 0;
+}
+
+.wrapper .room-container .settings-menu-container .menu-button:hover {
+	background-color: #656bff;
+}
+
+.wrapper .room-container .settings-menu-container .menu-button.active {
+	box-shadow: none;
+	left: 5px;
+	top: 5px;
+}
+.wrapper .room-container .settings-menu-container .menu-button > span {
+	font-family: "StepsMonoMonoThin";
+	font-style: normal;
+	font-weight: 300;
+	font-size: 20px;
+	line-height: 24px;
+	/* identical to box height */
+
+	text-align: justify;
+	letter-spacing: 0.34em;
+
+	color: inherit;
+}

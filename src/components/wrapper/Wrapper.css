@@ -1,0 +1,15 @@
+.wrapper .logo-container {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.wrapper .logo-container img {
+	position: relative;
+}
+.wrapper .logo-container img:hover {
+	box-shadow: 0px 2px 0px #4d2ddb;
+	position: relative;
+	top: 4px;
+}

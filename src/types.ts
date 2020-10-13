@@ -1,4 +1,4 @@
-interface RoomDataObject {
+export interface RoomDataObject {
   roomid: string
   peerids: PeerDataObject[]
 }
@@ -7,4 +7,8 @@ interface PeerDataObject {
   peerid: string
 }
 
-export default RoomDataObject
+
+export interface SettingsListObject {
+	id: number
+	name: string
+}
