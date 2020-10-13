@@ -17,7 +17,7 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({ direction }) => {
   const [_direction, set_Direction] = useState<String>(direction)
   const animate = useCallback(() => {
     requestRef.current = requestAnimationFrame(animate)
-    scaledFrame.current = requestRef.current * 2
+    scaledFrame.current = requestRef.current/2
     if (_direction === "right") {
       if (scaledFrame.current < 28000) {
       } else if (scaledFrame.current >= 28000) {

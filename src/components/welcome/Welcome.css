@@ -75,6 +75,7 @@
   font-style: normal;
   font-size: 75px;
   cursor: default;
+  text-shadow: -5px 5px #b494ee;
 }
 
 .wrapper .welcome-container .text-banner-container .text-container span {
