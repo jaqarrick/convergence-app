@@ -1,14 +1,13 @@
 export interface RoomDataObject {
-  roomid: string
-  peerids: PeerDataObject[]
+	roomid: string
+	peerids: PeerDataObject[]
 }
 
 interface PeerDataObject {
-  peerid: string
+	peerid: string
 }
 
-
-export interface SettingsListObject {
-	id: number
+export interface SettingsMenuButtonObject {
 	name: string
+	id: number
 }

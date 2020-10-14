@@ -1,12 +1,27 @@
 import React from "react"
-import SettingsButtons from "../../settingsbuttons/SettingsButtons"
 
 interface Props {
 	name: string
+	currentMenuName: string | null
+	switchMenus: (menuName: string | null) => void
 }
-const MenuButton: React.FC<Props> = ({ name }) => {
+const MenuButton: React.FC<Props> = ({
+	name,
+	currentMenuName,
+	switchMenus,
+}) => {
 	return (
-		<div className='menu-button'>
+		<div
+			onClick={() => {
+				if (currentMenuName === name) {
+					switchMenus(null)
+				} else {
+					switchMenus(name)
+				}
+			}}
+			className={
+				currentMenuName === name ? "menu-button active" : "menu-button"
+			}>
 			{" "}
 			<span>{name}</span>{" "}
 		</div>

@@ -2,12 +2,16 @@ import React from "react"
 import "./SettingsDisplay.css"
 
 interface Props {
-	currentSetting: null | string
+	currentMenu: any
 }
-const SettingsDisplay: React.FC<Props> = ({ currentSetting }) => (
-	<div className='settings-display-container'>
-		{" "}
-		Settings Display: {currentSetting}{" "}
+const SettingsDisplay: React.FC<Props> = ({ currentMenu }) => (
+	<div
+		className={
+			currentMenu !== null
+				? "settings-display-container active"
+				: "settings-display-container"
+		}>
+		{currentMenu ? currentMenu.name : ""}
 	</div>
 )
 

@@ -1,3 +1,17 @@
 .wrapper .room-container .settings-display-container {
-	display: none;
+	position: absolute;
+	width: 400px;
+	height: 400px;
+	box-shadow: none;
+	transition: all 0.2s;
+	top: 17px;
+	left: 317px;
+	transition: all 0.5s;
+}
+
+.wrapper .room-container .settings-display-container.active {
+	box-shadow: 5px 5px #3437a1;
+	left: 312px;
+	top: 12px;
+	border: solid black 1px;
 }

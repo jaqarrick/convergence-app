@@ -1,17 +1,29 @@
 import React from "react"
 import "./SettingsMenu.css"
-import { SettingsListObject } from "../../../../types"
 import MenuButton from "./components/MenuButton"
+import { SettingsMenuButtonObject } from "../../../../types"
 
 interface Props {
-	settingsList: SettingsListObject[]
+	switchMenus: (menuName: string | null) => void
+	currentMenuName: string | null
+	menusList: SettingsMenuButtonObject[]
 }
-const SettingsMenu: React.FC<Props> = ({ settingsList }) => (
+const SettingsMenu: React.FC<Props> = ({
+	switchMenus,
+	menusList,
+	currentMenuName,
+}) => (
 	<div className='settings-menu-container'>
 		{" "}
-		{settingsList.map(object => (
-			<MenuButton key={object.id} name={object.name} />
+		{menusList.map(object => (
+			<MenuButton
+				currentMenuName={currentMenuName}
+				switchMenus={switchMenus}
+				key={object.id}
+				name={object.name}
+			/>
 		))}{" "}
+		{}
 	</div>
 )
 
