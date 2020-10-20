@@ -1,14 +1,16 @@
 import React, { useCallback, useState } from "react"
 import "./Room.css"
+import { RouteChildrenProps } from "react-router-dom"
 import SettingsMenu from "./room-components/settingsmenu/SettingsMenu"
 import SettingsButtons from "./room-components/settingsbuttons/SettingsButtons"
 import SettingsDisplay from "./room-components/settingsdisplay/SettingsDisplay"
 import { SettingsMenuButtonObject } from "../../types"
 
-interface Props {
+interface RouteProps extends RouteChildrenProps<{ roomid: string }> {}
+interface PassedProps {
 	roomData: any[]
 }
-const Room: React.FC<Props> = ({ roomData }) => {
+const Room: React.FC<PassedProps & RouteProps> = ({ roomData, match }) => {
 	const [currentMenu, setCurrentMenu] = useState<any>(null)
 
 	const switchMenus = useCallback(
@@ -41,6 +43,7 @@ const Room: React.FC<Props> = ({ roomData }) => {
 				menusList={menusList}
 			/>
 			<SettingsDisplay currentMenu={currentMenu} />
+			<h1> {match?.params.roomid} </h1>
 		</div>
 	)
 }

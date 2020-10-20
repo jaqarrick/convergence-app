@@ -6,25 +6,46 @@ import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
 import Info from "../info/Info"
 import roomData from "../../data/roomData"
+import { RoomDataObject } from "../../types"
 
-export default function Wrapper() {
+interface Props {
+	enterSocketRoom: (roomid: string | null, peerid: string | null) => void
+	peerid: string | null
+	roomid: string | null
+	allRoomsData: RoomDataObject[] | null
+}
+const Wrapper: React.FC<Props> = ({
+	allRoomsData,
+	enterSocketRoom,
+	peerid,
+	roomid,
+}) => {
 	return (
 		<div className='wrapper'>
 			<Switch>
 				<Route
-					path='/room'
+					exact
+					path='/room/:roomid'
 					render={props => <Room {...props} roomData={roomData} />}></Route>
 				<Route path='/welcome'>
-					<Welcome />
+					<Welcome
+						allRoomsData={allRoomsData}
+						enterSocketRoom={enterSocketRoom}
+						peerid={peerid}
+					/>
 				</Route>
 				<Route exact path='/'>
-					<Redirect to='/room' />
+					<Redirect to='/welcome' />
 				</Route>
 			</Switch>
-			<div className='logo-container'>
+			<div
+				onClick={() => enterSocketRoom(roomid, peerid)}
+				className='logo-container'>
 				<img src={MainLogo} alt='main logo' />
 			</div>
 			<Info />
 		</div>
 	)
 }
+
+export default Wrapper

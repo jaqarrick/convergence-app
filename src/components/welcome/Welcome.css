@@ -35,6 +35,7 @@
 	display: flex;
 	position: fixed;
 	top: 35%;
+	display: none;
 }
 .wrapper .welcome-container .lower-container {
 	top: 48%;
