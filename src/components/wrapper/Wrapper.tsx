@@ -9,9 +9,12 @@ import roomData from "../../data/roomData"
 import { RoomDataObject } from "../../types"
 
 interface Props {
-	enterSocketRoom: (roomid: string | null, peerid: string | null) => void
+	enterSocketRoom: (
+		roomid: string | null | undefined,
+		peerid: string | null
+	) => void
 	peerid: string | null
-	roomid: string | null
+	roomid: string | undefined | null
 	allRoomsData: RoomDataObject[] | null
 }
 const Wrapper: React.FC<Props> = ({
@@ -25,8 +28,10 @@ const Wrapper: React.FC<Props> = ({
 			<Switch>
 				<Route
 					exact
-					path='/room/:roomid'
-					render={props => <Room {...props} roomData={roomData} />}></Route>
+					// path={`/room/:${roomid}`}
+					render={props => (
+						<Room {...props} roomData={roomData} roomid={roomid} />
+					)}></Route>
 				<Route path='/welcome'>
 					<Welcome
 						allRoomsData={allRoomsData}
@@ -39,7 +44,11 @@ const Wrapper: React.FC<Props> = ({
 				</Route>
 			</Switch>
 			<div
-				onClick={() => enterSocketRoom(roomid, peerid)}
+				onClick={() => {
+					console.log("enter random room")
+
+					enterSocketRoom(roomid, peerid)
+				}}
 				className='logo-container'>
 				<img src={MainLogo} alt='main logo' />
 			</div>

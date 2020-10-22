@@ -9,8 +9,13 @@ import { SettingsMenuButtonObject } from "../../types"
 interface RouteProps extends RouteChildrenProps<{ roomid: string }> {}
 interface PassedProps {
 	roomData: any[]
+	roomid: string | undefined | null
 }
-const Room: React.FC<PassedProps & RouteProps> = ({ roomData, match }) => {
+const Room: React.FC<PassedProps & RouteProps> = ({
+	roomData,
+	match,
+	roomid,
+}) => {
 	const [currentMenu, setCurrentMenu] = useState<any>(null)
 
 	const switchMenus = useCallback(
@@ -24,7 +29,6 @@ const Room: React.FC<PassedProps & RouteProps> = ({ roomData, match }) => {
 		},
 		[setCurrentMenu, roomData]
 	)
-
 	const [menusList] = useState<SettingsMenuButtonObject[]>(
 		roomData.map((object, i) => {
 			return {
@@ -43,7 +47,15 @@ const Room: React.FC<PassedProps & RouteProps> = ({ roomData, match }) => {
 				menusList={menusList}
 			/>
 			<SettingsDisplay currentMenu={currentMenu} />
-			<h1> {match?.params.roomid} </h1>
+			<h5
+				style={{
+					position: "absolute",
+					bottom: 0,
+					left: 0,
+				}}>
+				{" "}
+				{roomid}{" "}
+			</h5>
 		</div>
 	)
 }

@@ -1,6 +1,6 @@
 export interface RoomDataObject {
 	roomid: string
-	peerids: PeerDataObject[]
+	peerids: any
 }
 
 interface PeerDataObject {

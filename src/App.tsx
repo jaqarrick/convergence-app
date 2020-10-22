@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useHistory } from "react-router-dom"
-import io from "socket.io-client"
+import React, { useCallback, useEffect, useState } from "react"
+import { useHistory, useRouteMatch } from "react-router-dom"
 import Peer from "peerjs"
 import "./App.css"
 import Wrapper from "./components/wrapper/Wrapper"
+// import { RoomDataObject } from "./types"
+import useSockets from "./useSockets"
 import { RoomDataObject } from "./types"
 
 //This is established as soon as client connects
@@ -12,52 +13,55 @@ const peer = new Peer({
 	port: 9000,
 	path: "/convergence",
 })
-const socket = io.connect("http://localhost:5000")
+// const socket = io.connect("http://localhost:5000")
+
 const App: React.FC = () => {
 	const history = useHistory()
+	const match = useRouteMatch<{ roomid: string }>("/room/:roomid")
+	const roomid: null | string | undefined = match?.params.roomid
+	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
+
+	//event fired whenever all rooms are updated
+	const updateAllRoomsData = useCallback(
+		rooms => {
+			setAllRoomsData(rooms)
+		},
+		[setAllRoomsData]
+	)
+
+	const onRoomUpdate = useCallback(
+		roomid => {
+			history.push("/room/" + roomid)
+		},
+		[history]
+	)
+	const {
+		useSocketEmitCallback,
+		useSocketEmitEffect,
+		enterSocketRoom,
+	} = useSockets("http://localhost:5000", onRoomUpdate, updateAllRoomsData)
+
+	useSocketEmitEffect("request room data")
+
 	const [stream, setStream] = useState<null | MediaStream>(null)
 	const [myPeerId, setMyPeerId] = useState<string | null>(null)
-	const [roomid, setRoomid] = useState<string | null>(null)
-	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>(
-		null
-	)
+	const [currentPeers, setCurrentPeers] = useState<any>(new Set())
+
+	//as soon as peer is created, sets client peer id to specific string
 	useEffect(() => {
 		peer.on("open", (id: string) => {
 			setMyPeerId(id)
 		})
 	})
-	useEffect(() => {
-		socket.emit("request room data")
-	}, [])
-	useEffect(() => {
-		socket.on("send rooms", (rooms: RoomDataObject[]) => {
-			setAllRoomsData(rooms)
-		})
-	}, [setAllRoomsData])
 
-	useEffect(() => console.log(allRoomsData), [allRoomsData])
-	useEffect(() => {
-		socket.on("welcome", (msg: string) => console.log(msg))
-	})
-
-	useEffect(() => {
-		socket.on("update socket room", (roomid: string) => {
-			console.log(roomid)
-			setRoomid(roomid)
-			history.push(`/room/${roomid}`)
-		})
-	}, [setRoomid, history])
-
-	useEffect(() => {
-		console.log(roomid)
-	}, [roomid])
-	const enterSocketRoom = useCallback(
-		(roomid: string | null, peerid: string | null): void => {
-			console.log(roomid, peerid)
-			socket.emit("update room", { roomid, peerid })
-		},
-		[]
-	)
+	//update the current peers whenever the rooms data changes
+	//we need to take the peers array and turn it back into a set and then set that set to currentpeers
+	// useEffect(() => {
+	// 	console.log("peers changed")
+	// 	const currentRoom = allRoomsData?.find(({ roomid }) => roomid === roomid)
+	// 	console.log(currentRoom?.peerids)
+	// 	// setCurrentPeers(currentRoom?.peerids)
+	// }, [allRoomsData, setCurrentPeers, roomid])
 
 	const initUserAudio = useCallback(async () => {
 		let newStream: null | MediaStream = null
@@ -69,13 +73,14 @@ const App: React.FC = () => {
 		}
 	}, [setStream])
 
-	useEffect(() => {
-		// Create an scoped async function in the hook
-		async function init() {
-			await initUserAudio()
-		} // Execute the created function directly
-		init()
-	}, [initUserAudio])
+	//This initate getUserMedia fn above
+	// useEffect(() => {
+	// 	// Create an scoped async function in the hook
+	// 	async function init() {
+	// 		await initUserAudio()
+	// 	} // Execute the created function directly
+	// 	init()
+	// }, [initUserAudio])
 
 	return (
 		<div className='wrapper'>
