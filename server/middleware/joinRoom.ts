@@ -1,4 +1,4 @@
-export const joinRoom = (socket: any, io: any, roomid: any) => {
+export const joinRoom = (socket: any, io: any, roomid: string) => {
 	socket.join(roomid)
 	const data = {
 		message: `A new user has joined the room (${roomid})`,

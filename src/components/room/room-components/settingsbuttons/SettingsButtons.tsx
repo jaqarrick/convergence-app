@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./SettingsButtons.css"
 import AudioOffButton from "./logos/audio-off-button.svg"
 import AudioOnButton from "./logos/audio-on-button.svg"
@@ -11,7 +11,6 @@ const SettingsButtons: React.FC<Props> = () => {
 	const [isRecording, setIsRecording] = useState<boolean>(false)
 	const [isConverging, setIsConverging] = useState<boolean>(false)
 
-	useEffect(() => console.log(isAudioOn), [isAudioOn])
 	return (
 		<div className='settings-buttons'>
 			<div

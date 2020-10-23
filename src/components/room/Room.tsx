@@ -4,7 +4,7 @@ import { RouteChildrenProps } from "react-router-dom"
 import SettingsMenu from "./room-components/settingsmenu/SettingsMenu"
 import SettingsButtons from "./room-components/settingsbuttons/SettingsButtons"
 import SettingsDisplay from "./room-components/settingsdisplay/SettingsDisplay"
-import { SettingsMenuButtonObject } from "../../types"
+import { SettingsMenuButtonObject } from "../../../types"
 
 interface RouteProps extends RouteChildrenProps<{ roomid: string }> {}
 interface PassedProps {

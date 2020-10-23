@@ -6,7 +6,7 @@ import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
 import Info from "../info/Info"
 import roomData from "../../data/roomData"
-import { RoomDataObject } from "../../types"
+import { RoomDataObject } from "../../../types"
 
 interface Props {
 	enterSocketRoom: (
@@ -28,7 +28,7 @@ const Wrapper: React.FC<Props> = ({
 			<Switch>
 				<Route
 					exact
-					// path={`/room/:${roomid}`}
+					path={`/room/:${roomid}`}
 					render={props => (
 						<Room {...props} roomData={roomData} roomid={roomid} />
 					)}></Route>
@@ -46,7 +46,6 @@ const Wrapper: React.FC<Props> = ({
 			<div
 				onClick={() => {
 					console.log("enter random room")
-
 					enterSocketRoom(roomid, peerid)
 				}}
 				className='logo-container'>
