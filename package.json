@@ -1,35 +1,47 @@
 {
-  "name": "convergence-client",
+  "name": "convergence-app",
   "homepage": "https://jaqarrick.github.io/convergence-client/",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/express": "^4.17.8",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.62",
     "@types/peerjs": "^1.1.0",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.33",
     "@types/uuid": "^8.3.0",
+    "express": "^4.17.1",
     "peerjs": "^1.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "tone": "^14.7.58",
-    "typescript": "^3.7.5",
-    "uuid": "^8.3.0"
+    "ts-node-dev": "^1.0.0",
+    "uuid": "^8.3.0",
+    "uuidv4": "^6.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start-peer-server": "peerjs --port 9000 --key peerjs --path /convergence",
+    "dev": "nodemon",
+    "server": "ts-node server/index.ts",
+    "start:server": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./server/index.ts",
+    "start:app": "react-scripts start",
+    "start": "run-p --race start:server start:app",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "tsc": "tsc"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +60,11 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "gh-pages": "^3.1.0"
+    "gh-pages": "^3.1.0",
+    "nodemon": "^2.0.6",
+    "npm-run-all": "^4.1.5",
+    "ts-loader": "^8.0.6",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.9.7"
   }
 }
