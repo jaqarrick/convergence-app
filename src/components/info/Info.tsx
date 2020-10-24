@@ -22,7 +22,7 @@ const Info: React.FC = () => {
 					isInfoMenuOpen ? "info-text-container active" : "info-text-container"
 				}>
 				Convergerge is a virtual space designed for musical collaboration.
-				Customize your performence environment and start creating.
+				Customize your performance environment and start creating.
 			</div>
 		</div>
 	)
