@@ -57,14 +57,6 @@ const App: React.FC = () => {
 	})
 
 	useEffect(() => console.log(allRoomsData), [allRoomsData])
-	//update the current peers whenever the rooms data changes
-	//we need to take the peers array and turn it back into a set and then set that set to currentpeers
-	// useEffect(() => {
-	// 	console.log("peers changed")
-	// 	const currentRoom = allRoomsData?.find(({ roomid }) => roomid === roomid)
-	// 	console.log(currentRoom?.peerids)
-	// 	// setCurrentPeers(currentRoom?.peerids)
-	// }, [allRoomsData, setCurrentPeers, roomid])
 
 	//updates current peers
 	useEffect(
@@ -94,6 +86,8 @@ const App: React.FC = () => {
 		init()
 	}, [initUserAudio])
 
+	//init call anytime peers change
+	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => {
 		peer.on("call", (call: any) => {
 			if (stream) {
@@ -109,23 +103,29 @@ const App: React.FC = () => {
 					peerGain.connect(audioCtx.destination)
 					// const gain = new Gain(0).toDestination()
 					// gain.connect(src)
+					setConnected(true)
 				})
 			}
 		})
-	}, [stream])
-	const initPeerCall = useCallback(() => {
-		currentPeers?.forEach((id: string) => {
-			if (stream) {
-				peer.call(id, stream)
-				const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
-					stream
-				)
-				const gain: GainNode = audioCtx.createGain()
-				src.connect(gain)
-				gain.connect(audioCtx.destination)
+	}, [stream, setConnected])
+
+	useEffect(() => {
+		if (currentPeers && currentPeers.size > 1 && roomid) {
+			if (!connected) {
+				currentPeers?.forEach((id: string) => {
+					if (stream) {
+						peer.call(id, stream)
+						const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
+							stream
+						)
+						const gain: GainNode = audioCtx.createGain()
+						src.connect(gain)
+						gain.connect(audioCtx.destination)
+					}
+				})
 			}
-		})
-	}, [stream, currentPeers])
+		}
+	}, [currentPeers, connected, roomid, stream])
 
 	return (
 		<div className='wrapper'>
@@ -134,7 +134,6 @@ const App: React.FC = () => {
 				roomid={roomid}
 				enterSocketRoom={enterSocketRoom}
 				allRoomsData={allRoomsData}
-				initPeerCall={initPeerCall}
 			/>{" "}
 		</div>
 	)

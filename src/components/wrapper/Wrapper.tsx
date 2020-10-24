@@ -9,7 +9,6 @@ import roomData from "../../data/roomData"
 import { RoomDataObject } from "../../../types"
 
 interface Props {
-	initPeerCall: () => void
 	enterSocketRoom: (
 		roomid: string | null | undefined,
 		peerid: string | null
@@ -21,7 +20,6 @@ interface Props {
 const Wrapper: React.FC<Props> = ({
 	allRoomsData,
 	enterSocketRoom,
-	initPeerCall,
 	peerid,
 	roomid,
 }) => {
@@ -52,7 +50,6 @@ const Wrapper: React.FC<Props> = ({
 				}}
 				className='logo-container'>
 				<img src={MainLogo} alt='main logo' />
-				<button onClick={initPeerCall}> init peercall </button>
 			</div>
 			<Info />
 		</div>
