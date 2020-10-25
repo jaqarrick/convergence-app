@@ -6,7 +6,7 @@ import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
 import Info from "../info/Info"
 import roomData from "../../data/roomData"
-import { RoomDataObject } from "../../../types"
+import { RoomDataObject } from "../../../types/RoomDataObject"
 
 interface Props {
 	enterSocketRoom: (

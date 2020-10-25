@@ -4,7 +4,7 @@ import "./Welcome.css"
 import TextBanner from "../textbanner/TextBanner"
 import { Link } from "react-router-dom"
 import Wave from "../wave/Wave"
-import { RoomDataObject } from "../../../types"
+import { RoomDataObject } from "../../../types/RoomDataObject"
 interface Props {
 	allRoomsData: RoomDataObject[] | null
 	peerid: string | null

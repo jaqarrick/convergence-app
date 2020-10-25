@@ -1,4 +1,7 @@
-import { RoomDataObject, SerializedRoomDataObject } from "../../types"
+import {
+	RoomDataObject,
+	SerializedRoomDataObject,
+} from "../../types/RoomDataObject"
 
 const deserializeRooms = (
 	serializedRooms: SerializedRoomDataObject[]

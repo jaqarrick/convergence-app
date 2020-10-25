@@ -5,7 +5,10 @@ import "./App.css"
 import Wrapper from "./components/wrapper/Wrapper"
 // import { RoomDataObject } from "./types"
 import useSockets from "./util/useSockets"
-import { RoomDataObject, SerializedRoomDataObject } from "../types"
+import {
+	RoomDataObject,
+	SerializedRoomDataObject,
+} from "../types/RoomDataObject"
 import deserializeRooms from "./util/deserializeRooms"
 import { Gain, ToneAudioBuffer } from "tone"
 

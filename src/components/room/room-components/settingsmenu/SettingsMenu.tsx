@@ -1,7 +1,7 @@
 import React from "react"
 import "./SettingsMenu.css"
 import MenuButton from "./components/MenuButton"
-import { SettingsMenuButtonObject } from "../../../../../types"
+import SettingsMenuButtonObject from "../../../../../types/SettingsMenuButtonObject"
 
 interface Props {
 	switchMenus: (menuName: string | null) => void
