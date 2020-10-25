@@ -10,8 +10,8 @@ import {
 	SerializedRoomDataObject,
 } from "../types/RoomDataObject"
 import deserializeRooms from "./util/deserializeRooms"
-import { Gain, ToneAudioBuffer } from "tone"
-
+import useAudioRack from "./util/audio/useAudioRack"
+import settings from "./util/audio/settings"
 //This is established as soon as client connects
 const peer = new Peer({
 	host: "192.168.0.6",
@@ -48,7 +48,9 @@ const App: React.FC = () => {
 	} = useSockets("http://192.168.0.6:5000", onRoomUpdate, updateAllRoomsData)
 
 	useSocketEmitEffect("request room data")
+	const [connected, setConnected] = useState<Boolean>(false)
 
+	const { connectStream } = useAudioRack(settings, setConnected)
 	const [stream, setStream] = useState<null | MediaStream>(null)
 	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
@@ -90,27 +92,14 @@ const App: React.FC = () => {
 	}, [initUserAudio])
 
 	//init call anytime peers change
-	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => {
 		peer.on("call", (call: any) => {
 			if (stream) {
 				call.answer(stream)
-				call.on("stream", (peerstream: MediaStream) => {
-					console.log("call received")
-					console.log(peerstream)
-					const peerSrc: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
-						peerstream
-					)
-					const peerGain: GainNode = audioCtx.createGain()
-					peerSrc.connect(peerGain)
-					peerGain.connect(audioCtx.destination)
-					// const gain = new Gain(0).toDestination()
-					// gain.connect(src)
-					setConnected(true)
-				})
+				call.on("stream", connectStream)
 			}
 		})
-	}, [stream, setConnected])
+	}, [stream, setConnected, connectStream])
 
 	useEffect(() => {
 		if (currentPeers && currentPeers.size > 1 && roomid) {
