@@ -82,6 +82,12 @@ const App: React.FC = () => {
 		}
 	}, [setStream])
 
+	useEffect(() => {
+		if (stream) {
+			connectStream(stream)
+		}
+	}, [stream])
+
 	// This initate getUserMedia fn above
 	useEffect(() => {
 		// Create an scoped async function in the hook

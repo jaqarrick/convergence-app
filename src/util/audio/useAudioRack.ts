@@ -1,43 +1,37 @@
-import e from "express"
 import { useCallback, useEffect, useMemo } from "react"
-import Tone, {
-	PitchShift,
-	Context,
-	Compressor,
-	Gain,
-	EQ3,
-	ToneAudioNode,
-} from "tone"
+import * as Tone from "tone"
 import AudioRackSettingsObject from "../../../types/AudioRackSettingsObject"
-import settings from "./settings"
+
+const ac = new AudioContext()
+Tone.setContext(ac)
 
 export default function useAudioRack(
 	rackSettings: AudioRackSettingsObject,
 	setConnected: (arg0: boolean) => void
 ) {
-	const ac: AudioContext = useMemo(() => new AudioContext(), [])
-	const eq3 = useMemo(() => new EQ3().connect(ac.destination), [ac])
-	const compressor = useMemo(() => new Compressor(), [])
-	const analyser = useMemo(() => ac.createAnalyser(), [ac])
-	const context = useMemo(() => new Context(ac), [ac])
+	const compressor = useMemo(() => new Tone.Compressor(), [])
+	const delay = useMemo(() => new Tone.PingPongDelay(10), [])
+	const reverb = useMemo(() => new Tone.Reverb(10), [])
 	const baseGain = useMemo(() => ac.createGain(), [])
-	const gain = useMemo(() => new Gain(), [])
 
 	useEffect(() => {
-		baseGain.connect(analyser)
-		Tone.connect(analyser, eq3)
-		eq3.connect(compressor)
-		compressor.connect(ac.destination)
-	}, [baseGain, eq3, compressor])
+		Tone.connect(compressor, delay)
+		Tone.connect(delay, reverb)
+		Tone.connect(reverb, ac.destination)
+	}, [compressor, reverb, delay])
+	useEffect(() => {
+		baseGain.gain.value = 2
+		Tone.connect(baseGain, compressor)
+	}, [baseGain, compressor])
 
 	const connectStream = useCallback(
 		(stream: MediaStream) => {
-			console.log("call received")
-			const src: MediaStreamAudioSourceNode = ac.createMediaStreamSource(stream)
-			src.connect(baseGain)
+			const src = ac.createMediaStreamSource(stream)
+			console.log(src)
+			Tone.connect(src, baseGain)
 			setConnected(true)
 		},
-		[ac, setConnected]
+		[setConnected, baseGain]
 	)
 
 	return {
