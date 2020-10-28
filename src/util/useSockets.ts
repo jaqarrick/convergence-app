@@ -1,11 +1,13 @@
 import { useEffect, useCallback, useMemo } from "react"
 
 import io from "socket.io-client"
+import { userSettingsObject } from "../../types/userSettingsObject"
 
 const useSockets = (
 	url: string,
 	onRoomUpdate: any,
-	updateAllRoomsData: (rooms: any[]) => void
+	updateAllRoomsData: (rooms: any[]) => void,
+	setRoomAudioSettings: (newSettings: userSettingsObject[]) => void
 ) => {
 	const socket = useMemo(() => io.connect(url), [url])
 	useEffect(() => {
@@ -16,6 +18,11 @@ const useSockets = (
 		socket.on("send rooms", updateAllRoomsData)
 	}, [socket, updateAllRoomsData])
 
+	useEffect(() => {
+		socket.on("recieve updated room audio settings", (data: any) => {
+			setRoomAudioSettings(data)
+		})
+	}, [setRoomAudioSettings, socket])
 	const useSocketEmitEffect = (emitEvent: string, data?: any, deps?: any[]) =>
 		useEffect(() => {
 			socket.emit(emitEvent, data)

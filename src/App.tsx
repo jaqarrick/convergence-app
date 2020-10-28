@@ -12,6 +12,8 @@ import {
 import deserializeRooms from "./util/deserializeRooms"
 import useAudioRack from "./util/audio/useAudioRack"
 import settings from "./util/audio/settings"
+import { userSettingsObject } from "../types/userSettingsObject"
+import { connect } from "socket.io-client"
 //This is established as soon as client connects
 const peer = new Peer({
 	host: "192.168.0.6",
@@ -41,16 +43,34 @@ const App: React.FC = () => {
 		},
 		[history]
 	)
+	const [roomAudioSettings, setRoomAudioSettings] = useState<
+		userSettingsObject[]
+	>(settings)
+
+	useEffect(() => console.log(roomAudioSettings), [roomAudioSettings])
+
 	const {
 		useSocketEmitCallback,
 		useSocketEmitEffect,
 		enterSocketRoom,
-	} = useSockets("http://192.168.0.6:5000", onRoomUpdate, updateAllRoomsData)
+		socket,
+	} = useSockets(
+		"http://192.168.0.6:5000",
+		onRoomUpdate,
+		updateAllRoomsData,
+		setRoomAudioSettings
+	)
 
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 
-	const { connectStream } = useAudioRack(settings, setConnected)
+	const { connectStream, updateEffect } = useAudioRack(
+		setConnected,
+		setRoomAudioSettings,
+		roomAudioSettings,
+		socket,
+		roomid
+	)
 	const [stream, setStream] = useState<null | MediaStream>(null)
 	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
@@ -86,7 +106,7 @@ const App: React.FC = () => {
 		if (stream) {
 			connectStream(stream)
 		}
-	}, [stream])
+	}, [stream, connectStream])
 
 	// This initate getUserMedia fn above
 	useEffect(() => {
@@ -132,6 +152,9 @@ const App: React.FC = () => {
 				roomid={roomid}
 				enterSocketRoom={enterSocketRoom}
 				allRoomsData={allRoomsData}
+				roomAudioSettings={roomAudioSettings}
+				setRoomAudioSettings={setRoomAudioSettings}
+				updateEffect={updateEffect}
 			/>{" "}
 		</div>
 	)

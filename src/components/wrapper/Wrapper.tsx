@@ -5,8 +5,9 @@ import Welcome from "../welcome/Welcome"
 import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
 import Info from "../info/Info"
-import roomData from "../../data/roomData"
+// import roomData from "../../data/roomData"
 import { RoomDataObject } from "../../../types/RoomDataObject"
+import { userSettingsObject } from "../../../types/userSettingsObject"
 
 interface Props {
 	enterSocketRoom: (
@@ -15,13 +16,24 @@ interface Props {
 	) => void
 	peerid: string | null
 	roomid: string | undefined | null
+	updateEffect: (
+		effectName: string,
+		effectGroup: string,
+		paramName: string,
+		update: string | number
+	) => void
 	allRoomsData: RoomDataObject[] | null
+	setRoomAudioSettings: (settings: userSettingsObject[]) => void
+	roomAudioSettings: userSettingsObject[]
 }
 const Wrapper: React.FC<Props> = ({
 	allRoomsData,
 	enterSocketRoom,
 	peerid,
 	roomid,
+	roomAudioSettings,
+	setRoomAudioSettings,
+	updateEffect,
 }) => {
 	return (
 		<div className='wrapper'>
@@ -30,7 +42,13 @@ const Wrapper: React.FC<Props> = ({
 					exact
 					path={`/room/:${roomid}`}
 					render={props => (
-						<Room {...props} roomData={roomData} roomid={roomid} />
+						<Room
+							{...props}
+							roomAudioSettings={roomAudioSettings}
+							setRoomAudioSettings={setRoomAudioSettings}
+							roomid={roomid}
+							updateEffect={updateEffect}
+						/>
 					)}></Route>
 				<Route path='/welcome'>
 					<Welcome

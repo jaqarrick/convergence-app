@@ -30,6 +30,18 @@ io.on("connection", (socket: any) => {
 		const { roomid, peerid } = data
 		sendUpdatedRooms(io, roomid, peerid)
 	})
+
+	socket.on("send updated room audio settings", data => {
+		const { roomid, updatedSettings } = data
+		if (roomid) {
+			console.log("settings received")
+
+			socket
+				.to(roomid)
+				.emit("recieve updated room audio settings", updatedSettings)
+		}
+	})
+
 	socket.on("disconnect", () => {
 		console.log("A user has disconnected!")
 		//need to add a function here that removes and updates rooms data

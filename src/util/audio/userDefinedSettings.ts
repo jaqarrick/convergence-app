@@ -1,32 +1,32 @@
-//default settings when client connects to new room
-
 import { uuid } from "uuidv4"
 import { userSettingsObject } from "../../../types/userSettingsObject"
-const audioRackSettings: userSettingsObject[] = [
+const userDefinedSettings: userSettingsObject[] = [
 	{
-		name: "environment",
+		name: "inputs",
 		id: uuid(),
 		options: [
 			{
-				name: "reverb",
+				name: "input",
 				id: uuid(),
 				params: {
-					decay: 5,
+					isConnected: true,
 				},
 			},
 		],
 	},
 	{
-		name: "options",
+		name: "outputs",
 		id: uuid(),
 		options: [
 			{
-				name: "delay",
+				name: "input",
 				id: uuid(),
-				params: {},
+				params: {
+					isConnected: true,
+				},
 			},
 		],
 	},
 ]
 
-export default audioRackSettings
+export default userDefinedSettings

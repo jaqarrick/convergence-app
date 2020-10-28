@@ -1,12 +1,12 @@
 import React from "react"
 import "./SettingsMenu.css"
 import MenuButton from "./components/MenuButton"
-import SettingsMenuButtonObject from "../../../../../types/SettingsMenuButtonObject"
+import { userSettingsObject } from "../../../../../types/userSettingsObject"
 
 interface Props {
 	switchMenus: (menuName: string | null) => void
 	currentMenuName: string | null
-	menusList: SettingsMenuButtonObject[]
+	menusList: userSettingsObject[]
 }
 const SettingsMenu: React.FC<Props> = ({
 	switchMenus,
