@@ -24,23 +24,25 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateEffect }) => (
 			{currentMenu
 				? currentMenu.options.map((optionsObject: audioOption) => {
 						if (optionsObject.name === "reverb") {
-							console.log(optionsObject.params.decay)
 							return (
-								<input
-									type='range'
-									min={1}
-									max={30}
-									value={optionsObject.params.decay}
-									onChange={e => {
-										const update = e.target.value
-										updateEffect(
-											optionsObject.name,
-											"environment",
-											"decay",
-											update
-										)
-									}}
-									key={optionsObject.id}></input>
+								<div>
+									<span> {optionsObject.params.decay}</span>
+									<input
+										type='range'
+										min={1}
+										max={30}
+										value={optionsObject.params.decay}
+										onChange={e => {
+											const update = e.target.value
+											updateEffect(
+												optionsObject.name,
+												"environment",
+												"decay",
+												update
+											)
+										}}
+										key={optionsObject.id}></input>
+								</div>
 							)
 						}
 						return <div key={optionsObject.id}>{optionsObject.name}</div>

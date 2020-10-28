@@ -47,8 +47,6 @@ const App: React.FC = () => {
 		userSettingsObject[]
 	>(settings)
 
-	useEffect(() => console.log(roomAudioSettings), [roomAudioSettings])
-
 	const {
 		useSocketEmitCallback,
 		useSocketEmitEffect,

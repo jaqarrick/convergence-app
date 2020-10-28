@@ -26,7 +26,9 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 	roomAudioSettings,
 	updateEffect,
 }) => {
-	const [currentMenu, setCurrentMenu] = useState<any>(null)
+	const [currentMenu, setCurrentMenu] = useState<
+		userSettingsObject | null | undefined
+	>(null)
 
 	const [userSettings, setUserSettings] = useState<userSettingsObject[]>(
 		userDefinedSettings
@@ -36,8 +38,14 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 		...userSettings,
 		...roomAudioSettings,
 	])
+
+	useEffect(() => {
+		console.log(roomAudioSettings)
+		setMenusList([...userSettings, ...roomAudioSettings])
+	}, [roomAudioSettings, userSettings, setMenusList])
+
 	const switchMenus = useCallback(
-		(menuName: string | null) => {
+		(menuName: string | null | undefined) => {
 			const current = menusList.find(({ name }) => name === menuName)
 			if (current) {
 				setCurrentMenu(current)

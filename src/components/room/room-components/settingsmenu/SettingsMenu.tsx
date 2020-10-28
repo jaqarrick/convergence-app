@@ -5,7 +5,7 @@ import { userSettingsObject } from "../../../../../types/userSettingsObject"
 
 interface Props {
 	switchMenus: (menuName: string | null) => void
-	currentMenuName: string | null
+	currentMenuName: string | null | undefined
 	menusList: userSettingsObject[]
 }
 const SettingsMenu: React.FC<Props> = ({

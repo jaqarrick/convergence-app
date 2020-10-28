@@ -2,7 +2,7 @@ import React from "react"
 
 interface Props {
 	name: string
-	currentMenuName: string | null
+	currentMenuName: string | null | undefined
 	switchMenus: (menuName: string | null) => void
 }
 const MenuButton: React.FC<Props> = ({
