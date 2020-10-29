@@ -13,10 +13,11 @@ export default function useAudioRack(
 	setRoomAudioSettings: any, //fix this
 	roomAudioSettings: userSettingsObject[],
 	socket: any,
-	roomid?: string
+	roomid?: string | null | undefined
 ) {
 	const compressor = useMemo(() => new Tone.Compressor(), [])
 	const delay = useMemo(() => new Tone.PingPongDelay(1), [])
+	const baseToneVol = useMemo(() => new Tone.Volume(), [])
 	const reverb = useMemo(() => new Tone.Reverb(5), [])
 	const baseGain = useMemo(() => ac.createGain(), [])
 
@@ -66,14 +67,16 @@ export default function useAudioRack(
 	)
 
 	useEffect(() => {
-		Tone.connect(compressor, delay)
+		Tone.connect(compressor, baseToneVol)
+		Tone.connect(baseToneVol, delay)
+		baseToneVol.mute = true
 		Tone.connect(delay, reverb)
 		Tone.connect(reverb, ac.destination)
-	}, [compressor, reverb, delay])
+	}, [compressor, reverb, delay, baseToneVol])
 	useEffect(() => {
 		baseGain.gain.value = 2
 		Tone.connect(baseGain, compressor)
-	}, [baseGain, compressor])
+	}, [baseGain, compressor, baseToneVol])
 
 	const connectStream = useCallback(
 		(stream: MediaStream) => {

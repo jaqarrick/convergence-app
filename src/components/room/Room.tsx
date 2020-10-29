@@ -39,6 +39,7 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 		...roomAudioSettings,
 	])
 
+	useEffect(() => console.log(roomid), [roomid])
 	useEffect(() => {
 		setMenusList([...userSettings, ...roomAudioSettings])
 	}, [roomAudioSettings, userSettings, setMenusList])

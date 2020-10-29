@@ -28,6 +28,11 @@ const App: React.FC = () => {
 	const history = useHistory()
 	const match = useRouteMatch<{ roomid: string }>("/room/:roomid")
 	const roomid: null | string | undefined = match?.params.roomid
+
+	// const [roomid, setRoomid] = useState<null | string | undefined>(
+	// 	match?.params.roomid
+	// )
+
 	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
 	const [currentPeers, setCurrentPeers] = useState<Set<string>>()
 	//event fired whenever all rooms are updated
@@ -46,6 +51,7 @@ const App: React.FC = () => {
 	const [roomAudioSettings, setRoomAudioSettings] = useState<
 		userSettingsObject[]
 	>(settings)
+	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
 	const {
 		leaveSocketRoom,
@@ -59,6 +65,20 @@ const App: React.FC = () => {
 		setRoomAudioSettings
 	)
 
+	useEffect(() => {
+		console.log(allRoomsData)
+	}, [allRoomsData])
+	useEffect(() => {
+		console.log(roomid)
+		if (roomid) {
+			console.log("entered")
+			enterSocketRoom(roomid, myPeerId)
+		}
+	}, [enterSocketRoom, myPeerId, roomid])
+	// useEffect(() => {
+	// 	setRoomid(match?.params.roomid)
+	// }, [setRoomid, match])
+
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 
@@ -70,7 +90,6 @@ const App: React.FC = () => {
 		roomid
 	)
 	const [stream, setStream] = useState<null | MediaStream>(null)
-	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
 	//as soon as peer is created, sets client peer id to specific string
 	useEffect(() => {

@@ -6,6 +6,7 @@ import { userSettingsObject } from "../../types/userSettingsObject"
 const useSockets = (
 	url: string,
 	onRoomUpdate: any,
+
 	updateAllRoomsData: (rooms: any[]) => void,
 	setRoomAudioSettings: (newSettings: userSettingsObject[]) => void
 ) => {

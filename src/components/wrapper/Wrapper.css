@@ -10,9 +10,13 @@
 .wrapper .logo-container .join-options-container {
 	height: 55px;
 	margin-right: 10px;
-	display: flex;
+	display: none;
 	flex-direction: column;
 	justify-content: space-between;
+}
+
+.wrapper .logo-container .join-options-container.active {
+	display: flex;
 }
 .wrapper .logo-container .join-options {
 	display: flex;

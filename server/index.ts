@@ -52,6 +52,11 @@ io.on("connection", (socket: any) => {
 		}
 	})
 
+	socket.on("disconnecting", async () => {
+		console.log(socket.id)
+		//request room and peerid
+		//leave the room and disconnect the peerid
+	})
 	socket.on("disconnect", () => {
 		console.log("A user has disconnected!")
 		//need to add a function here that removes and updates rooms data

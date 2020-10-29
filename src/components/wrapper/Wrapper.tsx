@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import "./Wrapper.css"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
 import Welcome from "../welcome/Welcome"
@@ -40,6 +40,10 @@ const Wrapper: React.FC<Props> = ({
 	updateEffect,
 	leaveSocketRoom,
 }) => {
+	const [isJoinRoomOptionsMenuOpen, setisJoinRoomOptionsMenuOpen] = useState<
+		boolean
+	>(false)
+	useEffect(() => console.log(roomid), [roomid])
 	return (
 		<div className='wrapper'>
 			<Switch>
@@ -67,10 +71,19 @@ const Wrapper: React.FC<Props> = ({
 				</Route>
 			</Switch>
 			<div className='logo-container'>
-				<div className='join-options-container'>
+				<div
+					className={
+						isJoinRoomOptionsMenuOpen
+							? "join-options-container active"
+							: "join-options-container"
+					}>
 					<div
 						onClick={() => {
-							enterSocketRoom(roomid, peerid)
+							console.log("enter")
+							enterSocketRoom(null, peerid)
+							if (roomid) {
+								leaveSocketRoom(roomid, peerid)
+							}
 						}}
 						className='join-options'>
 						join new
@@ -79,19 +92,33 @@ const Wrapper: React.FC<Props> = ({
 						className='join-options'
 						onClick={() => {
 							if (allRoomsData) {
-								const randomId = Math.floor(Math.random() * allRoomsData.length)
-								const randomRoomObject: RoomDataObject = allRoomsData[randomId]
-								const randomRoomid = randomRoomObject.roomid
-								if (randomRoomid) {
-									enterSocketRoom(randomRoomid, peerid)
+								if (roomid) {
+									const filteredRooms = allRoomsData.filter(
+										(object: RoomDataObject) => object.roomid !== roomid
+									)
+									if (filteredRooms.length > 0) {
+										const randomId = Math.floor(
+											Math.random() * filteredRooms.length
+										)
+										const randomRoomObject: RoomDataObject =
+											allRoomsData[randomId]
+										enterSocketRoom(randomRoomObject.roomid, peerid)
+										leaveSocketRoom(roomid, peerid)
+									} else {
+										enterSocketRoom(null, peerid)
+										leaveSocketRoom(roomid, peerid)
+									}
 								} else {
-									enterSocketRoom(null, peerid)
+									enterSocketRoom(roomid, peerid)
+									if (roomid) {
+										leaveSocketRoom(roomid, peerid)
+									}
 								}
 							}
 						}}>
 						join random
 					</div>
-					<Link to='/welcome'>
+					<Link to='/welcome' style={{ textDecoration: "none" }}>
 						<div
 							className='join-options'
 							onClick={() => leaveSocketRoom(roomid, peerid)}>
@@ -99,11 +126,14 @@ const Wrapper: React.FC<Props> = ({
 							leave room
 						</div>{" "}
 					</Link>
-				</div>
-				<Link to='/welcome'>
-					{" "}
-					<img src={MainLogo} alt='main logo' />
-				</Link>
+				</div>{" "}
+				<img
+					onClick={() =>
+						setisJoinRoomOptionsMenuOpen(!isJoinRoomOptionsMenuOpen)
+					}
+					src={MainLogo}
+					alt='main logo'
+				/>
 			</div>
 			<Info />
 		</div>
