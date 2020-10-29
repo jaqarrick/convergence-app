@@ -38,7 +38,7 @@ io.on("connection", (socket: any) => {
 
 	socket.on("leave room", (data: RoomidPacket) => {
 		const { roomid, peerid } = data
-		leaveSocketRoom(socket, roomid, peerid)
+		leaveSocketRoom(io, socket, roomid, peerid)
 	})
 
 	socket.on("send updated room audio settings", data => {

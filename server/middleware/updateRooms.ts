@@ -5,6 +5,7 @@ import {
 } from "../../types/RoomDataObject"
 import SerializeRooms from "./serializeRooms"
 const { v4: uuidv4 } = require("uuid")
+
 let rooms: RoomDataObject[] = []
 
 const updateRooms = (
@@ -60,7 +61,12 @@ const sendRooms = (socket: any): void => {
 	console.log("sent rooms list")
 }
 
-const leaveSocketRoom = (socket: any, roomid: string, peerid: string): void => {
+const leaveSocketRoom = (
+	io: any,
+	socket: any,
+	roomid: string,
+	peerid: string
+): void => {
 	//find the room object that the peer is in
 	console.log(rooms)
 
@@ -81,7 +87,7 @@ const leaveSocketRoom = (socket: any, roomid: string, peerid: string): void => {
 	console.log(filteredRooms)
 	rooms = filteredRooms
 	console.log(rooms)
-	socket.emit("send rooms", SerializeRooms(rooms))
+	io.emit("send rooms", SerializeRooms(rooms))
 }
 
 export { updateRooms, sendRooms, leaveSocketRoom }

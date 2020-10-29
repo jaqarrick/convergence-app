@@ -37,7 +37,7 @@
     "server": "ts-node server/index.ts",
     "start:server": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./server/index.ts",
     "start:app": "react-scripts start",
-    "start": "run-p --race start:server start:app",
+    "start": "run-p --race start:server start-peer-server start:app ",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

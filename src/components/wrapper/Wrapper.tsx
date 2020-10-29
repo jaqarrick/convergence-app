@@ -75,7 +75,22 @@ const Wrapper: React.FC<Props> = ({
 						className='join-options'>
 						join new
 					</div>
-					<div className='join-options'>join random</div>
+					<div
+						className='join-options'
+						onClick={() => {
+							if (allRoomsData) {
+								const randomId = Math.floor(Math.random() * allRoomsData.length)
+								const randomRoomObject: RoomDataObject = allRoomsData[randomId]
+								const randomRoomid = randomRoomObject.roomid
+								if (randomRoomid) {
+									enterSocketRoom(randomRoomid, peerid)
+								} else {
+									enterSocketRoom(null, peerid)
+								}
+							}
+						}}>
+						join random
+					</div>
 					<Link to='/welcome'>
 						<div
 							className='join-options'
