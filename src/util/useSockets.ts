@@ -40,8 +40,22 @@ const useSockets = (
 		},
 		[socket]
 	)
+	const leaveSocketRoom = useCallback(
+		(roomid: string | null | undefined, peerid: string | null) => {
+			if (peerid && roomid) {
+				console.log("leave room event fired")
+				socket.emit("leave room", { roomid, peerid })
+			} else if (!roomid) {
+				console.log("It looks like you're not in a room yet")
+			} else if (!peerid) {
+				console.log("You don't have an assigned peerid... something went wrong")
+			}
+		},
+		[socket]
+	)
 
 	return {
+		leaveSocketRoom,
 		useSocketEmitCallback,
 		useSocketEmitEffect,
 		enterSocketRoom,

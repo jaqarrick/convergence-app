@@ -48,7 +48,7 @@ const App: React.FC = () => {
 	>(settings)
 
 	const {
-		useSocketEmitCallback,
+		leaveSocketRoom,
 		useSocketEmitEffect,
 		enterSocketRoom,
 		socket,
@@ -78,8 +78,6 @@ const App: React.FC = () => {
 			setMyPeerId(id)
 		})
 	})
-
-	useEffect(() => console.log(allRoomsData), [allRoomsData])
 
 	//updates current peers
 	useEffect(
@@ -153,6 +151,7 @@ const App: React.FC = () => {
 				roomAudioSettings={roomAudioSettings}
 				setRoomAudioSettings={setRoomAudioSettings}
 				updateEffect={updateEffect}
+				leaveSocketRoom={leaveSocketRoom}
 			/>{" "}
 		</div>
 	)

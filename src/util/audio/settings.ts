@@ -1,6 +1,6 @@
 //default settings when client connects to new room
 
-import { uuid } from "uuidv4"
+import { v4 as uuid } from "uuid"
 import { userSettingsObject } from "../../../types/userSettingsObject"
 const audioRackSettings: userSettingsObject[] = [
 	{

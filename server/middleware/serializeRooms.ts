@@ -1,12 +1,14 @@
 //input is rooms data array, which contains:
 
-import { RoomDataObject, SerializedRoomDataObject } from "../../types"
+import {
+	RoomDataObject,
+	SerializedRoomDataObject,
+} from "../../types/RoomDataObject"
 
 //[...{roomid: string, peerids: set}]
 const SerializeRooms = (rooms: RoomDataObject[]): SerializedRoomDataObject[] =>
 	rooms.map((roomObject: RoomDataObject) => {
 		const { roomid, peerids } = roomObject
-		console.log(peerids)
 		const peeridsArray = Array.from(peerids)
 		return {
 			roomid: roomid,

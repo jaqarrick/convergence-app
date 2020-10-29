@@ -1,6 +1,6 @@
 import React from "react"
 import "./Wrapper.css"
-import { Switch, Route, Redirect } from "react-router-dom"
+import { Switch, Route, Redirect, Link } from "react-router-dom"
 import Welcome from "../welcome/Welcome"
 import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
@@ -22,6 +22,10 @@ interface Props {
 		paramName: string,
 		update: string | number
 	) => void
+	leaveSocketRoom: (
+		roomid: string | null | undefined,
+		peerid: string | null
+	) => void
 	allRoomsData: RoomDataObject[] | null
 	setRoomAudioSettings: (settings: userSettingsObject[]) => void
 	roomAudioSettings: userSettingsObject[]
@@ -34,6 +38,7 @@ const Wrapper: React.FC<Props> = ({
 	roomAudioSettings,
 	setRoomAudioSettings,
 	updateEffect,
+	leaveSocketRoom,
 }) => {
 	return (
 		<div className='wrapper'>
@@ -61,13 +66,29 @@ const Wrapper: React.FC<Props> = ({
 					<Redirect to='/welcome' />
 				</Route>
 			</Switch>
-			<div
-				onClick={() => {
-					console.log("enter random room")
-					enterSocketRoom(roomid, peerid)
-				}}
-				className='logo-container'>
-				<img src={MainLogo} alt='main logo' />
+			<div className='logo-container'>
+				<div className='join-options-container'>
+					<div
+						onClick={() => {
+							enterSocketRoom(roomid, peerid)
+						}}
+						className='join-options'>
+						join new
+					</div>
+					<div className='join-options'>join random</div>
+					<Link to='/welcome'>
+						<div
+							className='join-options'
+							onClick={() => leaveSocketRoom(roomid, peerid)}>
+							{" "}
+							leave room
+						</div>{" "}
+					</Link>
+				</div>
+				<Link to='/welcome'>
+					{" "}
+					<img src={MainLogo} alt='main logo' />
+				</Link>
 			</div>
 			<Info />
 		</div>

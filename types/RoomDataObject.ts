@@ -7,3 +7,8 @@ export interface SerializedRoomDataObject {
 	roomid: string
 	peerids: string[]
 }
+
+export interface RoomidPacket {
+	roomid: string
+	peerid: string
+}

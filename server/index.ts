@@ -7,7 +7,12 @@ import ioSocket from "socket.io"
 const io = ioSocket(server)
 import { sendUpdatedRooms } from "./middleware/sendUpdatedRooms"
 import { joinRoom } from "./middleware/joinRoom"
-import { updateRooms, sendRooms } from "./middleware/updateRooms"
+import {
+	updateRooms,
+	sendRooms,
+	leaveSocketRoom,
+} from "./middleware/updateRooms"
+import { RoomidPacket } from "../types/RoomDataObject"
 
 io.on("connection", (socket: any) => {
 	// sendUpdatedRooms(io, null)
@@ -21,14 +26,19 @@ io.on("connection", (socket: any) => {
 	socket.on("request room data", () => sendRooms(socket))
 
 	//handles joining a new or existing room
-	socket.on("update room", (data: any) => {
+	socket.on("update room", (data: RoomidPacket) => {
 		const roomid: any = data.roomid
 		const peerid: any = data.peerid
 		updateRooms(roomid, peerid, socket, io)
 	})
-	socket.on("update peers", (data: any) => {
+	socket.on("update peers", (data: RoomidPacket) => {
 		const { roomid, peerid } = data
 		sendUpdatedRooms(io, roomid, peerid)
+	})
+
+	socket.on("leave room", (data: RoomidPacket) => {
+		const { roomid, peerid } = data
+		leaveSocketRoom(socket, roomid, peerid)
 	})
 
 	socket.on("send updated room audio settings", data => {
