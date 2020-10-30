@@ -41,7 +41,15 @@ const App: React.FC = () => {
 			setAllRoomsData(deserializeRooms(rooms)),
 		[setAllRoomsData]
 	)
+	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
+	useEffect(() => console.log(`current room id: ${roomid}`), [roomid])
+	useEffect(() => {
+		console.log(`my peer id: ${myPeerId}`)
+	}, [myPeerId])
+	useEffect(() => {
+		console.log(allRoomsData)
+	}, [allRoomsData])
 	const onRoomUpdate = useCallback(
 		roomid => {
 			history.push("/room/" + roomid)
@@ -51,7 +59,6 @@ const App: React.FC = () => {
 	const [roomAudioSettings, setRoomAudioSettings] = useState<
 		userSettingsObject[]
 	>(settings)
-	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
 	const {
 		leaveSocketRoom,
@@ -66,17 +73,10 @@ const App: React.FC = () => {
 	)
 
 	useEffect(() => {
-		console.log(allRoomsData)
-	}, [allRoomsData])
-	useEffect(() => {
-		console.log(roomid)
-		if (roomid) {
+		if (roomid && myPeerId) {
 			enterSocketRoom(roomid, myPeerId)
 		}
 	}, [enterSocketRoom, myPeerId, roomid])
-	// useEffect(() => {
-	// 	setRoomid(match?.params.roomid)
-	// }, [setRoomid, match])
 
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)

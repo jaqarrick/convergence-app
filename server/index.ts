@@ -29,6 +29,7 @@ io.on("connection", (socket: any) => {
 	socket.on("update room", (data: RoomidPacket) => {
 		const roomid: any = data.roomid
 		const peerid: any = data.peerid
+		console.log(`Peerid: ${peerid}`)
 		updateRooms(roomid, peerid, socket, io)
 	})
 	socket.on("update peers", (data: RoomidPacket) => {

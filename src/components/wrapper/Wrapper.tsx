@@ -43,7 +43,6 @@ const Wrapper: React.FC<Props> = ({
 	const [isJoinRoomOptionsMenuOpen, setisJoinRoomOptionsMenuOpen] = useState<
 		boolean
 	>(false)
-	useEffect(() => console.log(roomid), [roomid])
 	return (
 		<div className='wrapper'>
 			<Switch>
