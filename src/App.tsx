@@ -71,7 +71,6 @@ const App: React.FC = () => {
 	useEffect(() => {
 		console.log(roomid)
 		if (roomid) {
-			console.log("entered")
 			enterSocketRoom(roomid, myPeerId)
 		}
 	}, [enterSocketRoom, myPeerId, roomid])

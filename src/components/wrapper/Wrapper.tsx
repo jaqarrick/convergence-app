@@ -79,7 +79,6 @@ const Wrapper: React.FC<Props> = ({
 					}>
 					<div
 						onClick={() => {
-							console.log("enter")
 							enterSocketRoom(null, peerid)
 							if (roomid) {
 								leaveSocketRoom(roomid, peerid)
@@ -101,17 +100,25 @@ const Wrapper: React.FC<Props> = ({
 											Math.random() * filteredRooms.length
 										)
 										const randomRoomObject: RoomDataObject =
-											allRoomsData[randomId]
+											filteredRooms[randomId]
+										leaveSocketRoom(roomid, peerid)
 										enterSocketRoom(randomRoomObject.roomid, peerid)
-										leaveSocketRoom(roomid, peerid)
 									} else {
-										enterSocketRoom(null, peerid)
 										leaveSocketRoom(roomid, peerid)
+										enterSocketRoom(null, peerid)
 									}
 								} else {
-									enterSocketRoom(roomid, peerid)
-									if (roomid) {
-										leaveSocketRoom(roomid, peerid)
+									if (allRoomsData.length > 0) {
+										const allRoomids = allRoomsData.map(
+											(roomDataObject: RoomDataObject) => roomDataObject.roomid
+										)
+										const randomId = Math.floor(
+											Math.random() * allRoomids.length
+										)
+										const randomRoom = allRoomids[randomId]
+										enterSocketRoom(randomRoom, peerid)
+									} else {
+										enterSocketRoom(null, peerid)
 									}
 								}
 							}
