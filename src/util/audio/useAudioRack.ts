@@ -69,7 +69,7 @@ export default function useAudioRack(
 	useEffect(() => {
 		Tone.connect(compressor, baseToneVol)
 		Tone.connect(baseToneVol, delay)
-		baseToneVol.mute = true
+		baseToneVol.mute = false
 		Tone.connect(delay, reverb)
 		Tone.connect(reverb, ac.destination)
 	}, [compressor, reverb, delay, baseToneVol])
