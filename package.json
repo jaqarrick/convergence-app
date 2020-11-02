@@ -1,6 +1,5 @@
 {
   "name": "convergence-app",
-  "homepage": "https://jaqarrick.github.io/convergence-client/",
   "version": "0.1.0",
   "private": true,
   "type": "module",
