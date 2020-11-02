@@ -16,7 +16,7 @@ import { userSettingsObject } from "../types/userSettingsObject"
 import { connect } from "socket.io-client"
 //This is established as soon as client connects
 const peer = new Peer({
-	host: "192.168.0.6",
+	host: "localhost",
 	port: 9000,
 	path: "/convergence",
 })
@@ -66,7 +66,7 @@ const App: React.FC = () => {
 		enterSocketRoom,
 		socket,
 	} = useSockets(
-		"http://192.168.0.6:5000",
+		"http://localhost:5000",
 		onRoomUpdate,
 		updateAllRoomsData,
 		setRoomAudioSettings
