@@ -6,12 +6,28 @@
 	transition: all 0.2s;
 	top: 17px;
 	left: 317px;
+	height: 0px;
 	transition: all 0.5s;
+	background-color: #edeef9;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
 }
 
 .wrapper .room-container .settings-display-container.active {
-	box-shadow: 5px 5px #3437a1;
+	box-shadow: 5px 5px #2c3093;
 	left: 312px;
 	top: 12px;
 	border: solid black 1px;
+	height: 400px;
+	/* min-height: 300px; */
+}
+
+.wrapper .room-container .settings-display-container .settings-display {
+	width: 70%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-family: "StepsMonoMonoThin";
+	letter-spacing: 0.34em;
+	font-weight: 300;
 }

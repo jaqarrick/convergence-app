@@ -18,9 +18,8 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateEffect }) => (
 				? "settings-display-container active"
 				: "settings-display-container"
 		}>
-		{currentMenu ? currentMenu.name : ""}
-		<div>
-			{" "}
+		<div className='settings-display'>
+			{currentMenu ? currentMenu.name : ""}{" "}
 			{currentMenu
 				? currentMenu.options.map((optionsObject: audioOption) => {
 						if (optionsObject.name === "reverb") {

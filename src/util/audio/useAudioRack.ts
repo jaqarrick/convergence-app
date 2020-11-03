@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react"
 import * as Tone from "tone"
+import { optionsFromArguments } from "tone"
 import {
 	userSettingsObject,
 	audioOption,
@@ -15,8 +16,34 @@ export default function useAudioRack(
 	socket: any,
 	roomid?: string | null | undefined
 ) {
+	const getInitSettings = useCallback(
+		(settingType: string, settingName: string) => {
+			//get the current settings object
+			const currentSettingType = roomAudioSettings.find(
+				(setting: userSettingsObject) => setting.name === settingType
+			)
+
+			//find the effect in 'options'
+			if (currentSettingType) {
+				const currentSetting = currentSettingType.options.find(
+					(option: audioOption) => option.name === settingName
+				)
+
+				if (currentSetting && currentSetting.params) {
+					return currentSetting.params
+				}
+			}
+			//return object of params
+		},
+		[roomAudioSettings]
+	)
 	const compressor = useMemo(() => new Tone.Compressor(), [])
-	const delay = useMemo(() => new Tone.PingPongDelay(1), [])
+	const delay = useMemo(() => {
+		const params = getInitSettings("effects", "delay")
+		const { wet, delayTime, feedback } = params
+		const _delay = new Tone.PingPongDelay(delayTime, feedback)
+		return _delay
+	}, [getInitSettings])
 	const baseToneVol = useMemo(() => new Tone.Volume(), [])
 	const reverb = useMemo(() => new Tone.Reverb(5), [])
 	const baseGain = useMemo(() => ac.createGain(), [])
