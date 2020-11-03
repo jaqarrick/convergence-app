@@ -1,4 +1,3 @@
-web: npm run build && npm run start:web
-peer: npm run start:peer-server
-sockets: npm run start:server
+web: npm i && npm run start:peer-server && npm run start:server && npm run build
+
 
