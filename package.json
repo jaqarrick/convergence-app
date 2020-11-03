@@ -38,8 +38,9 @@
     "start:peer-server": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./peer-server/peer.ts",
     "start:app": "react-scripts start",
     "start:web": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./web/app.ts",
-    "start": "run-p --race start:server start:peer-server start:app ",
+    "start": "run-p --race start:server start:peer-server",
     "build": "react-scripts build",
+    "heroku-postbuild": "npm run build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "tsc": "tsc"
