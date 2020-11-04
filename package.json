@@ -2,7 +2,6 @@
   "name": "convergence-app",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -45,6 +44,7 @@
     "start": "run-p --race start:server start:peer-server start:app",
     "build": "react-scripts build",
     "heroku-postbuild": "npm run build",
+    "postinstall": "tsc",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "tsc": "tsc"
