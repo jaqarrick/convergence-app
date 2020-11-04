@@ -10,9 +10,11 @@ import { joinRoom } from "./middleware/joinRoom"
 import {
 	updateRooms,
 	sendRooms,
-	leaveSocketRoom,
+	updateSocketIdToPeerIdMap,
+	leaveRoom,
 } from "./middleware/updateRooms"
 import { RoomidPacket } from "../types/RoomDataObject"
+import roomState from "./middleware/roomState"
 
 io.on("connection", (socket: any) => {
 	// sendUpdatedRooms(io, null)
@@ -24,7 +26,19 @@ io.on("connection", (socket: any) => {
 
 	//handles initial request of rooms on App render
 	socket.on("request room data", () => sendRooms(socket))
-
+	socket.on("send peer package", (peerid: string) => {
+		const socketid = socket.id
+		console.log(`peer id: ${peerid}, socketid: ${socketid}`)
+		updateSocketIdToPeerIdMap(
+			"add",
+			socketid,
+			roomState,
+			socket,
+			io,
+			null,
+			peerid
+		)
+	})
 	//handles joining a new or existing room
 	socket.on("update room", (data: RoomidPacket) => {
 		const roomid: any = data.roomid
@@ -39,7 +53,7 @@ io.on("connection", (socket: any) => {
 
 	socket.on("leave room", (data: RoomidPacket) => {
 		const { roomid, peerid } = data
-		leaveSocketRoom(io, socket, roomid, peerid)
+		leaveRoom(io, socket, roomid, peerid)
 	})
 
 	socket.on("send updated room audio settings", data => {
@@ -53,14 +67,26 @@ io.on("connection", (socket: any) => {
 		}
 	})
 
-	socket.on("disconnecting", async () => {
-		console.log(socket.id)
-		//request room and peerid
-		//leave the room and disconnect the peerid
+	socket.on("disconnecting", () => {
+		console.log(socket.id, socket.rooms)
+		const socketRooms = Object.keys(socket.rooms)
+		if (socketRooms.length === 2) {
+			const currentRoomArray = socketRooms.filter(
+				(key: string) => key !== socket.id
+			)
+			const currentRoom = currentRoomArray[0]
+			updateSocketIdToPeerIdMap(
+				"disconnect",
+				socket.id,
+				roomState,
+				socket,
+				io,
+				currentRoom
+			)
+		}
 	})
 	socket.on("disconnect", () => {
 		console.log("A user has disconnected!")
-		//need to add a function here that removes and updates rooms data
 	})
 })
 

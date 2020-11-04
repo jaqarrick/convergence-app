@@ -12,3 +12,8 @@ export interface RoomidPacket {
 	roomid: string
 	peerid: string
 }
+
+export interface RoomStateObject {
+	rooms: RoomDataObject[]
+	socketIdToPeerIdMap: Map<string, string>
+}

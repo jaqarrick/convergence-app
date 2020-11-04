@@ -45,7 +45,10 @@ const App: React.FC = () => {
 
 	useEffect(() => console.log(`current room id: ${roomid}`), [roomid])
 	useEffect(() => {
-		console.log(`my peer id: ${myPeerId}`)
+		if (myPeerId) {
+			console.log(`my peer id: ${myPeerId} and it's been sent to the server`)
+			socket.emit("send peer package", myPeerId)
+		}
 	}, [myPeerId])
 	useEffect(() => {
 		console.log(allRoomsData)

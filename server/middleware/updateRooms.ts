@@ -1,12 +1,48 @@
 import { joinRoom } from "./joinRoom"
-import {
-	SerializedRoomDataObject,
-	RoomDataObject,
-} from "../../types/RoomDataObject"
+import { RoomDataObject, RoomStateObject } from "../../types/RoomDataObject"
 import SerializeRooms from "./serializeRooms"
 const { v4: uuidv4 } = require("uuid")
 
-let rooms: RoomDataObject[] = []
+import roomState from "./roomState"
+
+const updateSocketIdToPeerIdMap = (
+	method: string,
+	socketid: string,
+	roomState: RoomStateObject,
+	socket?: any,
+	io?: any,
+	roomid?: string,
+
+	peerid?: string
+) => {
+	if (method === "add") {
+		roomState.socketIdToPeerIdMap.set(socketid, peerid)
+	}
+	if (method === "disconnect") {
+		//find the peerid in the map
+		const peerIdToRemove: string = roomState.socketIdToPeerIdMap.get(socketid)
+		if (peerIdToRemove) {
+			const newRoomData: RoomDataObject[] = roomState.rooms.map(
+				(roomDataObject: RoomDataObject) => {
+					if (roomDataObject.peerids.has(peerIdToRemove)) {
+						if (roomid) {
+							socket.leave(roomid)
+						}
+						roomDataObject.peerids.delete(peerIdToRemove)
+						return roomDataObject
+					}
+					return roomDataObject
+				}
+			)
+
+			const filteredNewRoomData = newRoomData.filter(
+				(roomDataObject: RoomDataObject) => roomDataObject.peerids.size >= 1
+			)
+			roomState.rooms = filteredNewRoomData
+			io.emit("send rooms", SerializeRooms(roomState.rooms))
+		}
+	}
+}
 
 const updateRooms = (
 	roomid: string | null,
@@ -22,7 +58,14 @@ const updateRooms = (
 			roomid: randomRoomid,
 			peerids: new Set([peerid]),
 		}
-		rooms.push(roomObject)
+
+		//compare and swap
+		const CAS = (roomObject: RoomDataObject, roomState: RoomStateObject) => {
+			const prevRoomState = roomState.rooms
+			const newRoomState = [...prevRoomState, roomObject]
+			roomState.rooms = newRoomState
+		}
+		CAS(roomObject, roomState)
 		joinRoom(socket, io, randomRoomid)
 	} else {
 		//if roomid is specified, find that specific roomObject in rooms
@@ -35,7 +78,10 @@ const updateRooms = (
 			arrayOfObjects.find(
 				(object: RoomDataObject) => object.roomid === property
 			)
-		const currentRoom: RoomDataObject = getCurrentObject(roomid, rooms)
+		const currentRoom: RoomDataObject = getCurrentObject(
+			roomid,
+			roomState.rooms
+		)
 		if (currentRoom) {
 			//join the room
 			joinRoom(socket, io, roomid)
@@ -50,18 +96,18 @@ const updateRooms = (
 		}
 	}
 	//send the updated list of room data back to all clients connected
-	console.log("Here are the rooms :", SerializeRooms(rooms))
-	io.emit("send rooms", SerializeRooms(rooms))
+	console.log("Here are the rooms :", SerializeRooms(roomState.rooms))
+	io.emit("send rooms", SerializeRooms(roomState.rooms))
 }
 
 //this is an initial request from a socket that has connected
 const sendRooms = (socket: any): void => {
-	const roomsToSend = SerializeRooms(rooms)
+	const roomsToSend = SerializeRooms(roomState.rooms)
 	socket.emit("send rooms", roomsToSend)
 	console.log("sent rooms list")
 }
 
-const leaveSocketRoom = (
+const leaveRoom = (
 	io: any,
 	socket: any,
 	roomid: string,
@@ -70,7 +116,7 @@ const leaveSocketRoom = (
 	//find the room object that the peer is in
 
 	//removes the peer from the room object and leaves the socket room
-	const updatedRooms = rooms.map((roomObject: RoomDataObject) => {
+	const updatedRooms = roomState.rooms.map((roomObject: RoomDataObject) => {
 		if (roomObject.roomid === roomid) {
 			if (roomObject.peerids.has(peerid)) {
 				roomObject.peerids.delete(peerid)
@@ -83,8 +129,8 @@ const leaveSocketRoom = (
 		(roomObject: RoomDataObject) => roomObject.peerids.size >= 1
 	)
 
-	rooms = filteredRooms
-	io.emit("send rooms", SerializeRooms(rooms))
+	roomState.rooms = filteredRooms
+	io.emit("send rooms", SerializeRooms(roomState.rooms))
 }
 
-export { updateRooms, sendRooms, leaveSocketRoom }
+export { updateRooms, leaveRoom, sendRooms, updateSocketIdToPeerIdMap }
