@@ -68,6 +68,9 @@ const Wrapper: React.FC<Props> = ({
 				<Route exact path='/'>
 					<Redirect to='/welcome' />
 				</Route>
+				<Route path='/'>
+					<Redirect to='/welcome'></Redirect>
+				</Route>
 			</Switch>
 			<div className='logo-container'>
 				<div
