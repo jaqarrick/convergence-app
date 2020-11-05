@@ -22,7 +22,7 @@ import { connect } from "socket.io-client"
 // })
 
 let peer: any
-if (window.location.protocol === "https") {
+if (window.location.protocol === "https:") {
 	console.log("the protocol is https")
 	peer = new Peer({
 		host: "convergence-stage.herokuapp.com",
