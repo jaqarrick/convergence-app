@@ -117,7 +117,7 @@ const App: React.FC = () => {
 
 	//as soon as peer is created, sets client peer id to specific string
 	useEffect(() => {
-		peer.on("error", err => {
+		peer.on("error", (err: Error) => {
 			console.log(err)
 		})
 		peer.on("open", (id: string) => {
