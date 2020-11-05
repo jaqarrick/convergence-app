@@ -41,7 +41,7 @@
     "start:peer-server": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./peer-server/peer.ts",
     "start:app": "react-scripts start",
     "start:web": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./web/app.ts",
-    "start": "run-p --race start:server start:peer-server start:app",
+    "start": "run --race start:server start:peer-server start:app",
     "build": "react-scripts build",
     "heroku-postbuild": "npm run build",
     "postinstall": "tsc",
