@@ -14,12 +14,6 @@ import useAudioRack from "./util/audio/useAudioRack"
 import settings from "./util/audio/settings"
 import { userSettingsObject } from "../types/userSettingsObject"
 import { connect } from "socket.io-client"
-//This is established as soon as client connects
-// const peer = new Peer({
-// 	host: "localhost",
-// 	port: 9000,
-// 	path: "/convergence",
-// })
 
 let peer: any
 if (window.location.protocol === "https:") {
@@ -38,22 +32,16 @@ if (window.location.protocol === "https:") {
 		path: "/peerjs",
 	})
 }
-// const peer = new Peer()
 
 console.log(peer)
 console.log(window.location.protocol)
 console.log(window.location.port)
 const audioCtx = new AudioContext()
-// const socket = io.connect("http://localhost:5000")
 
 const App: React.FC = () => {
 	const history = useHistory()
 	const match = useRouteMatch<{ roomid: string }>("/room/:roomid")
 	const roomid: null | string | undefined = match?.params.roomid
-
-	// const [roomid, setRoomid] = useState<null | string | undefined>(
-	// 	match?.params.roomid
-	// )
 
 	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
 	const [currentPeers, setCurrentPeers] = useState<Set<string>>()
