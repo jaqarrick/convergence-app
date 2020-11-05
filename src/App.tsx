@@ -20,8 +20,17 @@ import { connect } from "socket.io-client"
 // 	port: 9000,
 // 	path: "/convergence",
 // })
-const peer = new Peer()
 
+// const peer = new Peer()
+const peer = new Peer({
+	host: window.location.hostname,
+	port: parseInt(window.location.port),
+	path: "/peerjs",
+})
+
+console.log(peer)
+console.log(window.location.protocol)
+console.log(window.location.port)
 const audioCtx = new AudioContext()
 // const socket = io.connect("http://localhost:5000")
 
@@ -45,12 +54,6 @@ const App: React.FC = () => {
 	const [myPeerId, setMyPeerId] = useState<string | null>(null)
 
 	useEffect(() => console.log(`current room id: ${roomid}`), [roomid])
-	useEffect(() => {
-		if (myPeerId) {
-			console.log(`my peer id: ${myPeerId} and it's been sent to the server`)
-			socket.emit("send peer package", myPeerId)
-		}
-	}, [myPeerId])
 
 	useEffect(() => {
 		console.log(allRoomsData)
@@ -78,6 +81,13 @@ const App: React.FC = () => {
 	)
 
 	useEffect(() => {
+		console.log(myPeerId)
+		if (myPeerId) {
+			console.log(`my peer id: ${myPeerId} and it's been sent to the server`)
+			socket.emit("send peer package", myPeerId)
+		}
+	}, [myPeerId, socket])
+	useEffect(() => {
 		if (roomid && myPeerId) {
 			enterSocketRoom(roomid, myPeerId)
 		}
@@ -97,7 +107,11 @@ const App: React.FC = () => {
 
 	//as soon as peer is created, sets client peer id to specific string
 	useEffect(() => {
+		peer.on("error", err => {
+			console.log(err)
+		})
 		peer.on("open", (id: string) => {
+			console.log(id)
 			setMyPeerId(id)
 		})
 	})
