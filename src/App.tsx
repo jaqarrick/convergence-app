@@ -27,7 +27,7 @@ if (window.location.protocol === "https") {
 		host: "convergence-stage.herokuapp.com",
 		port: 443,
 		secure: true,
-		path: "/peerjs",
+		path: "/",
 	})
 } else {
 	peer = new Peer({
