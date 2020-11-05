@@ -23,13 +23,15 @@ import { connect } from "socket.io-client"
 
 let peer: any
 if (window.location.protocol === "https") {
+	console.log("the protocol is https")
 	peer = new Peer({
 		host: "convergence-stage.herokuapp.com",
 		port: 443,
 		secure: true,
-		path: "/",
+		path: "/peerjs",
 	})
 } else {
+	console.log("the protocol is not https")
 	peer = new Peer({
 		host: window.location.hostname,
 		port: parseInt(window.location.port),
