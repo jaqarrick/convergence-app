@@ -10,7 +10,10 @@ const useSockets = (
 	updateAllRoomsData: (rooms: any[]) => void,
 	setRoomAudioSettings: (newSettings: userSettingsObject[]) => void
 ) => {
-	const socket = useMemo(() => io.connect(url), [url])
+	// const socket = useMemo(() => io.connect(url), [url])
+	const socket = useMemo(() => io.connect(), [])
+	const urlstring = useMemo(() => url, [])
+
 	useEffect(() => {
 		socket.on("update socket room", onRoomUpdate)
 	}, [socket, onRoomUpdate])

@@ -15,11 +15,12 @@ import settings from "./util/audio/settings"
 import { userSettingsObject } from "../types/userSettingsObject"
 import { connect } from "socket.io-client"
 //This is established as soon as client connects
-const peer = new Peer({
-	host: "localhost",
-	port: 9000,
-	path: "/convergence",
-})
+// const peer = new Peer({
+// 	host: "localhost",
+// 	port: 9000,
+// 	path: "/convergence",
+// })
+const peer = new Peer()
 
 const audioCtx = new AudioContext()
 // const socket = io.connect("http://localhost:5000")
@@ -50,6 +51,7 @@ const App: React.FC = () => {
 			socket.emit("send peer package", myPeerId)
 		}
 	}, [myPeerId])
+
 	useEffect(() => {
 		console.log(allRoomsData)
 	}, [allRoomsData])
