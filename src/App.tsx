@@ -81,7 +81,6 @@ const App: React.FC = () => {
 	)
 
 	useEffect(() => {
-		console.log(myPeerId)
 		if (myPeerId) {
 			console.log(`my peer id: ${myPeerId} and it's been sent to the server`)
 			socket.emit("send peer package", myPeerId)

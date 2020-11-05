@@ -81,9 +81,11 @@ const Wrapper: React.FC<Props> = ({
 					}>
 					<div
 						onClick={() => {
-							enterSocketRoom(null, peerid)
-							if (roomid) {
-								leaveSocketRoom(roomid, peerid)
+							if (peerid) {
+								enterSocketRoom(null, peerid)
+								if (roomid) {
+									leaveSocketRoom(roomid, peerid)
+								}
 							}
 						}}
 						className='join-options'>
@@ -92,7 +94,7 @@ const Wrapper: React.FC<Props> = ({
 					<div
 						className='join-options'
 						onClick={() => {
-							if (allRoomsData) {
+							if (allRoomsData && peerid) {
 								if (roomid) {
 									const filteredRooms = allRoomsData.filter(
 										(object: RoomDataObject) => object.roomid !== roomid
