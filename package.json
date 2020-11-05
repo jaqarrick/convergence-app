@@ -1,5 +1,6 @@
 {
   "name": "convergence-app",
+  "homepage": "https://convergence-stage.herokuapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

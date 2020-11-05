@@ -1,6 +1,6 @@
 {
-  "short_name": "client",
-  "name": "convergence-client",
+  "short_name": "convergence",
+  "name": "convergence-app",
   
   "start_url": ".",
   "display": "standalone",
