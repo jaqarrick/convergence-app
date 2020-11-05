@@ -21,12 +21,22 @@ import { connect } from "socket.io-client"
 // 	path: "/convergence",
 // })
 
+let peer: any
+if (window.location.protocol === "https") {
+	peer = new Peer({
+		host: "convergence-stage.herokuapp.com",
+		port: 443,
+		secure: true,
+		path: "/peerjs",
+	})
+} else {
+	peer = new Peer({
+		host: window.location.hostname,
+		port: parseInt(window.location.port),
+		path: "/peerjs",
+	})
+}
 // const peer = new Peer()
-const peer = new Peer({
-	host: window.location.hostname,
-	port: parseInt(window.location.port),
-	path: "/peerjs",
-})
 
 console.log(peer)
 console.log(window.location.protocol)
