@@ -87,6 +87,7 @@ const Wrapper: React.FC<Props> = ({
 								enterSocketRoom(null, peerid)
 								if (roomid) {
 									leaveSocketRoom(roomid, peerid)
+									endAllCalls()
 								}
 							}
 						}}
@@ -97,6 +98,7 @@ const Wrapper: React.FC<Props> = ({
 						className='join-options'
 						onClick={() => {
 							if (allRoomsData && peerid) {
+								endAllCalls()
 								if (roomid) {
 									const filteredRooms = allRoomsData.filter(
 										(object: RoomDataObject) => object.roomid !== roomid
