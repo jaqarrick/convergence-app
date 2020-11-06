@@ -1,9 +1,13 @@
 import React from "react"
 import "./SettingsDisplay.css"
-import { audioOption } from "../../../../../types/userSettingsObject"
+import {
+	audioOption,
+	ParamsObject,
+	userSettingsObject,
+} from "../../../../../types/userSettingsObject"
 
 interface Props {
-	currentMenu: any
+	currentMenu: userSettingsObject | null | undefined
 	updateEffect: (
 		effectName: string,
 		effectGroup: string,
@@ -19,34 +23,32 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateEffect }) => (
 				: "settings-display-container"
 		}>
 		<div className='settings-display'>
-			{currentMenu ? currentMenu.name : ""}{" "}
-			{currentMenu
-				? currentMenu.options.map((optionsObject: audioOption) => {
-						if (optionsObject.name === "reverb") {
-							return (
-								<div>
-									<span> {optionsObject.params.decay}</span>
-									<input
-										type='range'
-										min={1}
-										max={30}
-										value={optionsObject.params.decay}
-										onChange={e => {
-											const update = e.target.value
-											updateEffect(
-												optionsObject.name,
-												"environment",
-												"decay",
-												update
-											)
-										}}
-										key={optionsObject.id}></input>
-								</div>
-							)
-						}
-						return <div key={optionsObject.id}>{optionsObject.name}</div>
-				  })
-				: ""}
+			{currentMenu?.options.map((audioOptionsObject: audioOption) => {
+				return (
+					<div key={audioOptionsObject.id} className='option-container'>
+						<div className='option-name'> {audioOptionsObject.name} </div>
+						<div className='params-container'>
+							{audioOptionsObject.params.map((paramsObject: ParamsObject) => {
+								return (
+									<div key={paramsObject.id} className='param-container'>
+										<div className='param-name'> {paramsObject.paramName}</div>
+										<input
+											type='range'
+											min={paramsObject.minVal}
+											max={paramsObject.maxVal}
+											value={paramsObject.value}
+											onChange={e => console.log(e.target.value)}
+										/>
+										<div className='param-value-container'>
+											<div className='param-value'>{paramsObject.value} </div>
+										</div>
+									</div>
+								)
+							})}
+						</div>
+					</div>
+				)
+			})}
 		</div>
 	</div>
 )

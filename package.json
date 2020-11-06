@@ -35,7 +35,6 @@
     "uuidv4": "^6.2.4"
   },
   "scripts": {
-    "start-peer-server": "peerjs --port 9000 --key peerjs --path /convergence",
     "dev": "nodemon",
     "server": "ts-node server/index.ts",
     "start:server": "ts-node --project ../tsconfig.server.json --transpile-only  --script-mode  ./server/index.ts",

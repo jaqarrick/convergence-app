@@ -23,7 +23,7 @@ const MenuButton: React.FC<Props> = ({
 				currentMenuName === name ? "menu-button active" : "menu-button"
 			}>
 			{" "}
-			<span>{name}</span>{" "}
+			<span>{name.toLocaleLowerCase()}</span>{" "}
 		</div>
 	)
 }

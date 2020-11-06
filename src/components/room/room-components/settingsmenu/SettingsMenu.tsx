@@ -20,7 +20,7 @@ const SettingsMenu: React.FC<Props> = ({
 				currentMenuName={currentMenuName}
 				switchMenus={switchMenus}
 				key={object.id}
-				name={object.name}
+				name={object.settingsGroup}
 			/>
 		))}{" "}
 		{}

@@ -45,7 +45,10 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 
 	const switchMenus = useCallback(
 		(menuName: string | null | undefined) => {
-			const current = menusList.find(({ name }) => name === menuName)
+			const current = menusList.find(
+				(settingsObject: userSettingsObject) =>
+					settingsObject.settingsGroup === menuName
+			)
 			if (current) {
 				setCurrentMenu(current)
 			} else {
@@ -60,7 +63,7 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 			<SettingsButtons />
 			<SettingsMenu
 				switchMenus={switchMenus}
-				currentMenuName={currentMenu?.name}
+				currentMenuName={currentMenu?.settingsGroup}
 				menusList={menusList}
 			/>
 			<SettingsDisplay currentMenu={currentMenu} updateEffect={updateEffect} />

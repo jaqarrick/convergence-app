@@ -20,7 +20,7 @@ export default function useAudioRack(
 		(settingType: string, settingName: string) => {
 			//get the current settings object
 			const currentSettingType = roomAudioSettings.find(
-				(setting: userSettingsObject) => setting.name === settingType
+				(setting: userSettingsObject) => setting.settingsGroup === settingType
 			)
 
 			//find the effect in 'options'
@@ -40,58 +40,70 @@ export default function useAudioRack(
 	const compressor = useMemo(() => new Tone.Compressor(), [])
 	const delay = useMemo(() => {
 		const params = getInitSettings("effects", "delay")
-		const { wet, delayTime, feedback } = params
-		const _delay = new Tone.PingPongDelay(delayTime, feedback)
+		// const { wet, delayTime, feedback } = params
+		const _delay = new Tone.PingPongDelay()
 		return _delay
 	}, [getInitSettings])
+
 	const baseToneVol = useMemo(() => new Tone.Volume(), [])
 	const reverb = useMemo(() => new Tone.Reverb(5), [])
 	const baseGain = useMemo(() => ac.createGain(), [])
 
-	const updateReverb = useCallback(() => {
-		const parentObj = roomAudioSettings.find(
-			(setting: userSettingsObject) => setting.name === "environment"
-		)
-		const reverbOptions = parentObj?.options.find(
-			(optionObject: audioOption) => optionObject.name === "reverb"
-		)
-		reverb.decay = reverbOptions?.params.decay
-	}, [reverb, roomAudioSettings])
+	// const updateReverb = useCallback(() => {
+	// 	const parentObj = roomAudioSettings.find(
+	// 		(setting: userSettingsObject) => setting.name === "environment"
+	// 	)
+	// 	const reverbOptions = parentObj?.options.find(
+	// 		(optionObject: audioOption) => optionObject.name === "reverb"
+	// 	)
+	// 	reverb.decay = reverbOptions?.params.decay
+	// }, [reverb, roomAudioSettings])
 
-	useEffect(updateReverb, [roomAudioSettings])
+	// useEffect(updateReverb, [roomAudioSettings])
+
 	const updateEffect = useCallback(
 		(
 			effectName: string,
 			effectGroup: string,
 			paramName: string,
 			update: string | number
-		) => {
-			setRoomAudioSettings((prev: userSettingsObject[]) => {
-				const updatedSettings = prev.map(
-					(settingsObject: userSettingsObject) => {
-						if (settingsObject.name === effectGroup) {
-							settingsObject.options.map((option: audioOption) => {
-								if (option.name === effectName) {
-									option.params.decay = update
-									return option
-								}
-								return option
-							})
-						}
-						return settingsObject
-					}
-				)
-				if (roomid) {
-					socket.emit("send updated room audio settings", {
-						roomid,
-						updatedSettings,
-					})
-				}
-				return updatedSettings
-			})
-		},
-		[setRoomAudioSettings, roomid, socket]
+		) => {},
+		[]
 	)
+
+	// const updateEffect = useCallback(
+	// 	(
+	// 		effectName: string,
+	// 		effectGroup: string,
+	// 		paramName: string,
+	// 		update: string | number
+	// 	) => {
+	// 		setRoomAudioSettings((prev: userSettingsObject[]) => {
+	// 			const updatedSettings = prev.map(
+	// 				(settingsObject: userSettingsObject) => {
+	// 					if (settingsObject.settingsGroup === effectGroup) {
+	// 						settingsObject.options.map((option: audioOption) => {
+	// 							if (option.name === effectName) {
+	// 								option.params = update
+	// 								return option
+	// 							}
+	// 							return option
+	// 						})
+	// 					}
+	// 					return settingsObject
+	// 				}
+	// 			)
+	// 			if (roomid) {
+	// 				socket.emit("send updated room audio settings", {
+	// 					roomid,
+	// 					updatedSettings,
+	// 				})
+	// 			}
+	// 			return updatedSettings
+	// 		})
+	// 	},
+	// 	[setRoomAudioSettings, roomid, socket]
+	// )
 
 	useEffect(() => {
 		Tone.connect(compressor, baseToneVol)

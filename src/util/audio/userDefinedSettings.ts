@@ -1,29 +1,37 @@
 import { uuid } from "uuidv4"
 import { userSettingsObject } from "../../../types/userSettingsObject"
+enum settingsGroup {
+	environment = "ENVIRONMENT",
+	effects = "EFFECTS",
+	inputs = "INPUTS",
+	outputs = "OUTPUTS",
+}
+
+enum settingsName {
+	delay = "DELAY",
+	reverb = "REVERB",
+	chorus = "CHORUS",
+	input = "INPUT",
+	output = "OUTPUT",
+}
+
 const userDefinedSettings: userSettingsObject[] = [
 	{
-		name: "inputs",
+		settingsGroup: settingsGroup.inputs,
 		id: uuid(),
 		options: [
 			{
-				name: "input",
+				name: settingsName.input,
 				id: uuid(),
-				params: {
-					isConnected: true,
-				},
-			},
-		],
-	},
-	{
-		name: "outputs",
-		id: uuid(),
-		options: [
-			{
-				name: "input",
-				id: uuid(),
-				params: {
-					isConnected: true,
-				},
+				params: [
+					{
+						paramName: "connected?",
+						minVal: 0,
+						maxVal: 1,
+						value: 0,
+						id: uuid(),
+					},
+				],
 			},
 		],
 	},
