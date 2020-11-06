@@ -16,6 +16,7 @@ interface Props {
 	) => void
 	peerid: string | null
 	roomid: string | undefined | null
+	endAllCalls: () => void
 	updateEffect: (
 		effectName: string,
 		effectGroup: string,
@@ -39,6 +40,7 @@ const Wrapper: React.FC<Props> = ({
 	setRoomAudioSettings,
 	updateEffect,
 	leaveSocketRoom,
+	endAllCalls,
 }) => {
 	const [isJoinRoomOptionsMenuOpen, setisJoinRoomOptionsMenuOpen] = useState<
 		boolean
@@ -132,7 +134,10 @@ const Wrapper: React.FC<Props> = ({
 					<Link to='/welcome' style={{ textDecoration: "none" }}>
 						<div
 							className='join-options'
-							onClick={() => leaveSocketRoom(roomid, peerid)}>
+							onClick={() => {
+								leaveSocketRoom(roomid, peerid)
+								endAllCalls()
+							}}>
 							{" "}
 							leave room
 						</div>{" "}

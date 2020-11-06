@@ -32,7 +32,6 @@ if (window.location.protocol === "https:") {
 	})
 }
 
-console.log(peer)
 console.log(window.location.protocol)
 console.log(window.location.port)
 const audioCtx = new AudioContext()
@@ -76,7 +75,7 @@ const App: React.FC = () => {
 
 	useEffect(() => {
 		if (myPeerId) {
-			console.log(`my peer id: ${myPeerId} and it's been sent to the server`)
+			console.log(`My peer id: ${myPeerId} and it's been sent to the server`)
 			socket.emit("send peer package", myPeerId)
 		}
 	}, [myPeerId, socket])
@@ -146,31 +145,33 @@ const App: React.FC = () => {
 		init()
 	}, [initUserAudio])
 
+	const [allCalls, setAllCalls] = useState<any[]>([])
 	//init call anytime peers change
+	const endAllCalls = useCallback(() => {
+		allCalls.forEach(call => {
+			call.close()
+		})
+		setAllCalls([])
+	}, [allCalls])
 	useEffect(() => {
 		peer.on("call", (call: any) => {
 			if (stream) {
+				setAllCalls(prev => [...prev, call])
 				call.answer(stream)
 				call.on("stream", connectStream)
 			}
 		})
-	}, [stream, setConnected, connectStream])
+	}, [stream, setConnected, connectStream, setAllCalls])
 
-	const [isOnCall, setIsOnCall] = useState<boolean>(false)
-
-	useEffect(() => {
-		console.log(isOnCall)
-	}, [isOnCall])
 	useEffect(() => {
 		if (currentPeers && currentPeers.size <= 1 && roomid) {
 			console.log(currentPeers.size)
-			setIsOnCall(true)
 		}
 		if (currentPeers && currentPeers.size > 1 && roomid) {
 			console.log(currentPeers)
 			currentPeers?.forEach((id: string) => {
 				if (stream) {
-					console.log("initiating call!")
+					console.log("init call!")
 					peer.call(id, stream)
 					const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
 						stream
@@ -181,7 +182,7 @@ const App: React.FC = () => {
 				}
 			})
 		}
-	}, [currentPeers, connected, roomid, stream, setIsOnCall])
+	}, [currentPeers, connected, roomid, stream])
 
 	return (
 		<div className='wrapper'>
@@ -194,6 +195,7 @@ const App: React.FC = () => {
 				setRoomAudioSettings={setRoomAudioSettings}
 				updateEffect={updateEffect}
 				leaveSocketRoom={leaveSocketRoom}
+				endAllCalls={endAllCalls}
 			/>{" "}
 		</div>
 	)
