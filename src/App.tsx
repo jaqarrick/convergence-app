@@ -13,7 +13,6 @@ import deserializeRooms from "./util/deserializeRooms"
 import useAudioRack from "./util/audio/useAudioRack"
 import settings from "./util/audio/settings"
 import { userSettingsObject } from "../types/userSettingsObject"
-import { connect } from "socket.io-client"
 
 let peer: any
 if (window.location.protocol === "https:") {
@@ -73,12 +72,7 @@ const App: React.FC = () => {
 		useSocketEmitEffect,
 		enterSocketRoom,
 		socket,
-	} = useSockets(
-		"http://localhost:5000",
-		onRoomUpdate,
-		updateAllRoomsData,
-		setRoomAudioSettings
-	)
+	} = useSockets(onRoomUpdate, updateAllRoomsData, setRoomAudioSettings)
 
 	useEffect(() => {
 		if (myPeerId) {
@@ -94,7 +88,7 @@ const App: React.FC = () => {
 
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
-
+	useEffect(() => console.log(connected), [connected])
 	const { connectStream, updateEffect } = useAudioRack(
 		setConnected,
 		setRoomAudioSettings,
@@ -124,6 +118,8 @@ const App: React.FC = () => {
 			),
 		[allRoomsData, roomid, setCurrentPeers]
 	)
+
+	//initiates the client's media stream
 	const initUserAudio = useCallback(async () => {
 		let newStream: null | MediaStream = null
 		try {
@@ -135,6 +131,7 @@ const App: React.FC = () => {
 	}, [setStream])
 
 	useEffect(() => {
+		//connects user stream to rack
 		if (stream) {
 			connectStream(stream)
 		}
@@ -159,23 +156,32 @@ const App: React.FC = () => {
 		})
 	}, [stream, setConnected, connectStream])
 
+	const [isOnCall, setIsOnCall] = useState<boolean>(false)
+
 	useEffect(() => {
-		if (currentPeers && currentPeers.size > 1 && roomid) {
-			if (!connected) {
-				currentPeers?.forEach((id: string) => {
-					if (stream) {
-						peer.call(id, stream)
-						const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
-							stream
-						)
-						const gain: GainNode = audioCtx.createGain()
-						src.connect(gain)
-						gain.connect(audioCtx.destination)
-					}
-				})
-			}
+		console.log(isOnCall)
+	}, [isOnCall])
+	useEffect(() => {
+		if (currentPeers && currentPeers.size <= 1 && roomid) {
+			console.log(currentPeers.size)
+			setIsOnCall(true)
 		}
-	}, [currentPeers, connected, roomid, stream])
+		if (currentPeers && currentPeers.size > 1 && roomid) {
+			console.log(currentPeers)
+			currentPeers?.forEach((id: string) => {
+				if (stream) {
+					console.log("initiating call!")
+					peer.call(id, stream)
+					const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
+						stream
+					)
+					const gain: GainNode = audioCtx.createGain()
+					src.connect(gain)
+					gain.connect(audioCtx.destination)
+				}
+			})
+		}
+	}, [currentPeers, connected, roomid, stream, setIsOnCall])
 
 	return (
 		<div className='wrapper'>

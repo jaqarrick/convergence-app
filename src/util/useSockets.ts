@@ -4,7 +4,6 @@ import io from "socket.io-client"
 import { userSettingsObject } from "../../types/userSettingsObject"
 
 const useSockets = (
-	url: string,
 	onRoomUpdate: any,
 
 	updateAllRoomsData: (rooms: any[]) => void,
@@ -12,7 +11,6 @@ const useSockets = (
 ) => {
 	// const socket = useMemo(() => io.connect(url), [url])
 	const socket = useMemo(() => io.connect(), [])
-	const urlstring = useMemo(() => url, [url])
 
 	useEffect(() => {
 		socket.on("update socket room", onRoomUpdate)
