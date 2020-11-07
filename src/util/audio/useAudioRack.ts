@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import * as Tone from "tone"
-import { optionsFromArguments } from "tone"
+import { Recorder } from "tone"
 import {
 	userSettingsObject,
 	audioOption,
@@ -14,7 +14,8 @@ export default function useAudioRack(
 	setRoomAudioSettings: any, //fix this
 	roomAudioSettings: userSettingsObject[],
 	socket: any,
-	roomid?: string | null | undefined
+	isRecording: boolean,
+	setIsRecording: (isRecording: boolean) => void
 ) {
 	const getInitSettings = useCallback(
 		(settingType: string, settingName: string) => {
@@ -110,7 +111,8 @@ export default function useAudioRack(
 		Tone.connect(baseToneVol, delay)
 		baseToneVol.mute = false
 		Tone.connect(delay, reverb)
-		Tone.connect(reverb, ac.destination)
+
+		reverb.fan(ac.destination, ac.destination)
 	}, [compressor, reverb, delay, baseToneVol])
 	useEffect(() => {
 		baseGain.gain.value = 2
@@ -126,6 +128,14 @@ export default function useAudioRack(
 		},
 		[setConnected, baseGain]
 	)
+
+	useEffect(() => console.log(isRecording), [isRecording])
+
+	//set up tone recorder
+
+	useEffect(() => {
+		console.log(isRecording)
+	}, [isRecording])
 
 	return {
 		connectStream,

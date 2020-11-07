@@ -12,12 +12,14 @@ interface PassedProps {
 	roomid: string | undefined | null
 	roomAudioSettings: userSettingsObject[]
 	setRoomAudioSettings: (settings: userSettingsObject[]) => void
+	setIsRecording: (isRecording: boolean) => void
 	updateEffect: (
 		effectName: string,
 		effectGroup: string,
 		paramName: string,
 		update: string | number
 	) => void
+	isRecording: boolean
 }
 
 const Room: React.FC<PassedProps & RouteProps> = ({
@@ -25,6 +27,8 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 	roomid,
 	roomAudioSettings,
 	updateEffect,
+	setIsRecording,
+	isRecording,
 }) => {
 	const [currentMenu, setCurrentMenu] = useState<
 		userSettingsObject | null | undefined
@@ -60,7 +64,10 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 
 	return (
 		<div className='room-container'>
-			<SettingsButtons />
+			<SettingsButtons
+				setIsRecording={setIsRecording}
+				isRecording={isRecording}
+			/>
 			<SettingsMenu
 				switchMenus={switchMenus}
 				currentMenuName={currentMenu?.settingsGroup}

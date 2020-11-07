@@ -43,6 +43,8 @@ const App: React.FC = () => {
 
 	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
 	const [currentPeers, setCurrentPeers] = useState<Set<string>>()
+	const [isRecording, setIsRecording] = useState<boolean>(false)
+
 	//event fired whenever all rooms are updated
 	const updateAllRoomsData = useCallback(
 		(rooms: SerializedRoomDataObject[]) =>
@@ -93,7 +95,8 @@ const App: React.FC = () => {
 		setRoomAudioSettings,
 		roomAudioSettings,
 		socket,
-		roomid
+		isRecording,
+		setIsRecording
 	)
 	const [stream, setStream] = useState<null | MediaStream>(null)
 
@@ -196,6 +199,8 @@ const App: React.FC = () => {
 				updateEffect={updateEffect}
 				leaveSocketRoom={leaveSocketRoom}
 				endAllCalls={endAllCalls}
+				setIsRecording={setIsRecording}
+				isRecording={isRecording}
 			/>{" "}
 		</div>
 	)

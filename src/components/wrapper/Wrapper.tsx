@@ -10,6 +10,8 @@ import { RoomDataObject } from "../../../types/RoomDataObject"
 import { userSettingsObject } from "../../../types/userSettingsObject"
 
 interface Props {
+	setIsRecording: (isRecording: boolean) => void
+	isRecording: boolean
 	enterSocketRoom: (
 		roomid: string | null | undefined,
 		peerid: string | null
@@ -41,6 +43,8 @@ const Wrapper: React.FC<Props> = ({
 	updateEffect,
 	leaveSocketRoom,
 	endAllCalls,
+	setIsRecording,
+	isRecording,
 }) => {
 	const [isJoinRoomOptionsMenuOpen, setisJoinRoomOptionsMenuOpen] = useState<
 		boolean
@@ -54,6 +58,8 @@ const Wrapper: React.FC<Props> = ({
 					render={props => (
 						<Room
 							{...props}
+							isRecording={isRecording}
+							setIsRecording={setIsRecording}
 							roomAudioSettings={roomAudioSettings}
 							setRoomAudioSettings={setRoomAudioSettings}
 							roomid={roomid}
