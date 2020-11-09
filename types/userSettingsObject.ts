@@ -19,6 +19,7 @@ export interface ParamsObject {
 	maxVal: number
 	value: NormalRange | number
 	id: string
+	rangeAmount: "normal" | "ten" | "hundred" | "thousand"
 }
 
 enum settingsGroup {

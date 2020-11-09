@@ -29,6 +29,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 1,
 						minVal: 0,
 						id: uuid(),
+						rangeAmount: "normal",
 					},
 					{
 						paramName: "decay",
@@ -36,6 +37,7 @@ const audioRackSettings: userSettingsObject[] = [
 						minVal: 0,
 						maxVal: 20,
 						id: uuid(),
+						rangeAmount: "ten",
 					},
 				],
 			},
@@ -55,6 +57,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 1.0,
 						minVal: 0.0,
 						id: uuid(),
+						rangeAmount: "normal",
 					},
 					{
 						paramName: "delayTime",
@@ -62,6 +65,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 5,
 						minVal: 0,
 						id: uuid(),
+						rangeAmount: "ten",
 					},
 					{
 						paramName: "feedback",
@@ -69,6 +73,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 1,
 						minVal: 0,
 						id: uuid(),
+						rangeAmount: "normal",
 					},
 				],
 			},
@@ -82,6 +87,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 1.0,
 						minVal: 0.0,
 						id: uuid(),
+						rangeAmount: "normal",
 					},
 					{
 						paramName: "frequency",
@@ -89,6 +95,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 2000,
 						minVal: 0.0,
 						id: uuid(),
+						rangeAmount: "thousand",
 					},
 					{
 						paramName: "delayTime",
@@ -96,6 +103,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 2000,
 						minVal: 0,
 						id: uuid(),
+						rangeAmount: "thousand",
 					},
 					{
 						paramName: "depth",
@@ -103,6 +111,7 @@ const audioRackSettings: userSettingsObject[] = [
 						maxVal: 1.0,
 						minVal: 0.0,
 						id: uuid(),
+						rangeAmount: "normal",
 					},
 				],
 			},

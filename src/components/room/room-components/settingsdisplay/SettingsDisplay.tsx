@@ -50,11 +50,26 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateSetting }) => (
 										<div className='param-name'> {paramsObject.paramName}</div>
 										<input
 											type='range'
-											min={paramsObject.minVal}
-											max={paramsObject.maxVal}
-											value={paramsObject.value}
+											min={
+												paramsObject.rangeAmount === "normal"
+													? paramsObject.minVal * 1000
+													: paramsObject.minVal
+											}
+											max={
+												paramsObject.rangeAmount === "normal"
+													? paramsObject.maxVal * 1000
+													: paramsObject.maxVal
+											}
+											value={
+												paramsObject.rangeAmount === "normal"
+													? paramsObject.value * 1000
+													: paramsObject.value
+											}
 											onChange={e => {
-												const valueToUpdate = Number(e.target.value)
+												const valueToUpdate =
+													paramsObject.rangeAmount === "normal"
+														? Number(e.target.value) / 1000
+														: Number(e.target.value)
 												updateSetting(
 													currentMenu.settingsGroup,
 													audioOptionsObject.name,

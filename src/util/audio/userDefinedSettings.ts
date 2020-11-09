@@ -30,6 +30,7 @@ const userDefinedSettings: userSettingsObject[] = [
 						maxVal: 1,
 						value: 0,
 						id: uuid(),
+						rangeAmount: 'thousand'
 					},
 				],
 			},
