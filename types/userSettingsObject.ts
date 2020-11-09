@@ -1,3 +1,5 @@
+import { NormalRange } from "tone/build/esm/core/type/Units"
+
 export interface userSettingsObject {
 	settingsGroup: settingsGroup
 	id: string
@@ -15,7 +17,7 @@ export interface ParamsObject {
 	paramName: string
 	minVal: number
 	maxVal: number
-	value: number
+	value: NormalRange | number
 	id: string
 }
 

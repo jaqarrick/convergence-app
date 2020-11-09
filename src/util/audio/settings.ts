@@ -25,7 +25,7 @@ const audioRackSettings: userSettingsObject[] = [
 				params: [
 					{
 						paramName: "wet",
-						value: 0,
+						value: 0.5,
 						maxVal: 1,
 						minVal: 0,
 						id: uuid(),

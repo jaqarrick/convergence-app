@@ -18,11 +18,11 @@ enum settingsName {
 	input = "INPUT",
 	output = "OUTPUT",
 }
-export default function getParams(
+export const getParamsArray = (
 	allSettings: userSettingsObject[],
 	settingsGroup: settingsGroup,
 	settingsName: settingsName
-): ParamsObject[] | undefined {
+): ParamsObject[] | undefined => {
 	//find the current settings group
 	const currentSettingsGroupObject = () =>
 		allSettings.find(
@@ -34,5 +34,14 @@ export default function getParams(
 			(audioOptionObject: audioOption) =>
 				audioOptionObject.name === settingsName
 		)
+
 	return currentSettingsObject()?.params
 }
+
+export const getParamsObject = (
+	paramsArray: ParamsObject[],
+	paramName: string
+): ParamsObject | undefined =>
+	paramsArray.find(
+		(paramsObject: ParamsObject) => paramsObject.paramName === paramName
+	)

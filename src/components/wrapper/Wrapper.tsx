@@ -8,7 +8,22 @@ import Info from "../info/Info"
 // import roomData from "../../data/roomData"
 import { RoomDataObject } from "../../../types/RoomDataObject"
 import { userSettingsObject } from "../../../types/userSettingsObject"
+import { NormalRange } from "tone/build/esm/core/type/Units"
 
+enum settingsGroup {
+	environment = "ENVIRONMENT",
+	effects = "EFFECTS",
+	inputs = "INPUTS",
+	outputs = "OUTPUTS",
+}
+
+enum settingsName {
+	delay = "DELAY",
+	reverb = "REVERB",
+	chorus = "CHORUS",
+	input = "INPUT",
+	output = "OUTPUT",
+}
 interface Props {
 	setIsRecording: (isRecording: boolean) => void
 	isRecording: boolean
@@ -19,11 +34,11 @@ interface Props {
 	peerid: string | null
 	roomid: string | undefined | null
 	endAllCalls: () => void
-	updateEffect: (
-		effectName: string,
-		effectGroup: string,
+	updateSetting: (
+		settingsGroup: settingsGroup,
+		settingsName: settingsName,
 		paramName: string,
-		update: string | number
+		updatedValue: number | NormalRange
 	) => void
 	leaveSocketRoom: (
 		roomid: string | null | undefined,
@@ -40,7 +55,7 @@ const Wrapper: React.FC<Props> = ({
 	roomid,
 	roomAudioSettings,
 	setRoomAudioSettings,
-	updateEffect,
+	updateSetting,
 	leaveSocketRoom,
 	endAllCalls,
 	setIsRecording,
@@ -63,7 +78,7 @@ const Wrapper: React.FC<Props> = ({
 							roomAudioSettings={roomAudioSettings}
 							setRoomAudioSettings={setRoomAudioSettings}
 							roomid={roomid}
-							updateEffect={updateEffect}
+							updateSetting={updateSetting}
 						/>
 					)}></Route>
 				<Route path='/welcome'>

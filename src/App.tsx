@@ -90,7 +90,7 @@ const App: React.FC = () => {
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => console.log(connected), [connected])
-	const { connectStream, updateEffect } = useAudioRack(
+	const { connectStream, updateSetting } = useAudioRack(
 		setConnected,
 		setRoomAudioSettings,
 		roomAudioSettings,
@@ -196,7 +196,7 @@ const App: React.FC = () => {
 				allRoomsData={allRoomsData}
 				roomAudioSettings={roomAudioSettings}
 				setRoomAudioSettings={setRoomAudioSettings}
-				updateEffect={updateEffect}
+				updateSetting={updateSetting}
 				leaveSocketRoom={leaveSocketRoom}
 				endAllCalls={endAllCalls}
 				setIsRecording={setIsRecording}

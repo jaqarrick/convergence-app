@@ -5,17 +5,33 @@ import {
 	ParamsObject,
 	userSettingsObject,
 } from "../../../../../types/userSettingsObject"
+import { NormalRange } from "tone/build/esm/core/type/Units"
+
+enum settingsGroup {
+	environment = "ENVIRONMENT",
+	effects = "EFFECTS",
+	inputs = "INPUTS",
+	outputs = "OUTPUTS",
+}
+
+enum settingsName {
+	delay = "DELAY",
+	reverb = "REVERB",
+	chorus = "CHORUS",
+	input = "INPUT",
+	output = "OUTPUT",
+}
 
 interface Props {
 	currentMenu: userSettingsObject | null | undefined
-	updateEffect: (
-		effectName: string,
-		effectGroup: string,
+	updateSetting: (
+		settingsGroup: settingsGroup,
+		settingsName: settingsName,
 		paramName: string,
-		update: string | number
+		updatedValue: number | NormalRange
 	) => void
 }
-const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateEffect }) => (
+const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateSetting }) => (
 	<div
 		className={
 			currentMenu !== null
@@ -37,7 +53,15 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateEffect }) => (
 											min={paramsObject.minVal}
 											max={paramsObject.maxVal}
 											value={paramsObject.value}
-											onChange={e => console.log(e.target.value)}
+											onChange={e => {
+												const valueToUpdate = Number(e.target.value)
+												updateSetting(
+													currentMenu.settingsGroup,
+													audioOptionsObject.name,
+													paramsObject.paramName,
+													valueToUpdate
+												)
+											}}
 										/>
 										<div className='param-value-container'>
 											<div className='param-value'>{paramsObject.value} </div>

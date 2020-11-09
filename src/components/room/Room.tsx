@@ -6,18 +6,33 @@ import SettingsButtons from "./room-components/settingsbuttons/SettingsButtons"
 import SettingsDisplay from "./room-components/settingsdisplay/SettingsDisplay"
 import { userSettingsObject } from "../../../types/userSettingsObject"
 import userDefinedSettings from "../../util/audio/userDefinedSettings"
+import { NormalRange } from "tone/build/esm/core/type/Units"
 
+enum settingsGroup {
+	environment = "ENVIRONMENT",
+	effects = "EFFECTS",
+	inputs = "INPUTS",
+	outputs = "OUTPUTS",
+}
+
+enum settingsName {
+	delay = "DELAY",
+	reverb = "REVERB",
+	chorus = "CHORUS",
+	input = "INPUT",
+	output = "OUTPUT",
+}
 interface RouteProps extends RouteChildrenProps<{ roomid: string }> {}
 interface PassedProps {
 	roomid: string | undefined | null
 	roomAudioSettings: userSettingsObject[]
 	setRoomAudioSettings: (settings: userSettingsObject[]) => void
 	setIsRecording: (isRecording: boolean) => void
-	updateEffect: (
-		effectName: string,
-		effectGroup: string,
+	updateSetting: (
+		settingsGroup: settingsGroup,
+		settingsName: settingsName,
 		paramName: string,
-		update: string | number
+		updatedValue: number | NormalRange
 	) => void
 	isRecording: boolean
 }
@@ -26,7 +41,7 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 	match,
 	roomid,
 	roomAudioSettings,
-	updateEffect,
+	updateSetting,
 	setIsRecording,
 	isRecording,
 }) => {
@@ -73,7 +88,10 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 				currentMenuName={currentMenu?.settingsGroup}
 				menusList={menusList}
 			/>
-			<SettingsDisplay currentMenu={currentMenu} updateEffect={updateEffect} />
+			<SettingsDisplay
+				currentMenu={currentMenu}
+				updateSetting={updateSetting}
+			/>
 			<h5
 				style={{
 					position: "absolute",
