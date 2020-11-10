@@ -8,18 +8,25 @@ import ConvergeButton from "./logos/converge-button.svg"
 interface Props {
 	setIsRecording: (isRecording: boolean) => void
 	isRecording: boolean
+	isUserAudioOn: boolean
+	setIsUserAudioOn: (isUserAudioOn: boolean) => void
 }
 
-const SettingsButtons: React.FC<Props> = ({ setIsRecording, isRecording }) => {
+const SettingsButtons: React.FC<Props> = ({
+	setIsRecording,
+	isRecording,
+	isUserAudioOn,
+	setIsUserAudioOn,
+}) => {
 	const [isAudioOn, setIsAudioOn] = useState<boolean>(true)
 	const [isConverging, setIsConverging] = useState<boolean>(false)
 
 	return (
 		<div className='settings-buttons'>
 			<div
-				onClick={() => setIsAudioOn(!isAudioOn)}
+				onClick={() => setIsUserAudioOn(!isUserAudioOn)}
 				className={
-					isAudioOn ? "settings-button audio-active" : "settings-button"
+					isUserAudioOn ? "settings-button audio-active" : "settings-button"
 				}>
 				{" "}
 				{isAudioOn ? (

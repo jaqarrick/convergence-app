@@ -24,6 +24,8 @@ enum settingsName {
 }
 interface RouteProps extends RouteChildrenProps<{ roomid: string }> {}
 interface PassedProps {
+	isUserAudioOn: boolean
+	setIsUserAudioOn: (isUserAudioOn: boolean) => void
 	roomid: string | undefined | null
 	roomAudioSettings: userSettingsObject[]
 	setRoomAudioSettings: (settings: userSettingsObject[]) => void
@@ -44,6 +46,8 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 	updateSetting,
 	setIsRecording,
 	isRecording,
+	setIsUserAudioOn,
+	isUserAudioOn,
 }) => {
 	const [currentMenu, setCurrentMenu] = useState<
 		userSettingsObject | null | undefined
@@ -82,6 +86,8 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 			<SettingsButtons
 				setIsRecording={setIsRecording}
 				isRecording={isRecording}
+				isUserAudioOn={isUserAudioOn}
+				setIsUserAudioOn={setIsUserAudioOn}
 			/>
 			<SettingsMenu
 				switchMenus={switchMenus}

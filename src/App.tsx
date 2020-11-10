@@ -44,6 +44,7 @@ const App: React.FC = () => {
 	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
 	const [currentPeers, setCurrentPeers] = useState<Set<string>>()
 	const [isRecording, setIsRecording] = useState<boolean>(false)
+	const [isUserAudioOn, setIsUserAudioOn] = useState<boolean>(false)
 
 	//event fired whenever all rooms are updated
 	const updateAllRoomsData = useCallback(
@@ -86,19 +87,26 @@ const App: React.FC = () => {
 			enterSocketRoom(roomid, myPeerId)
 		}
 	}, [enterSocketRoom, myPeerId, roomid])
+	const [stream, setStream] = useState<null | MediaStream>(null)
 
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => console.log(connected), [connected])
-	const { connectStream, updateSetting } = useAudioRack(
+	const {
+		connectUserStream,
+		connectStream,
+		updateSetting,
+		switchUserAudio,
+	} = useAudioRack(
 		setConnected,
 		setRoomAudioSettings,
 		roomAudioSettings,
 		socket,
 		isRecording,
-		setIsRecording
+		setIsRecording,
+		isUserAudioOn,
+		setStream
 	)
-	const [stream, setStream] = useState<null | MediaStream>(null)
 
 	//as soon as peer is created, sets client peer id to specific string
 	useEffect(() => {
@@ -126,18 +134,19 @@ const App: React.FC = () => {
 		let newStream: null | MediaStream = null
 		try {
 			newStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-			setStream(newStream)
+			// setStream(newStream)
+			connectUserStream(newStream)
 		} catch (err) {
 			throw err
 		}
-	}, [setStream])
+	}, [setStream, connectUserStream])
 
-	useEffect(() => {
-		//connects user stream to rack
-		if (stream) {
-			connectStream(stream)
-		}
-	}, [stream, connectStream])
+	// useEffect(() => {
+	// 	//connects user stream to rack
+	// 	if (stream) {
+	// 		connectUserStream(stream)
+	// 	}
+	// }, [stream, connectStream])
 
 	// This initate getUserMedia fn above
 	useEffect(() => {
@@ -201,6 +210,8 @@ const App: React.FC = () => {
 				endAllCalls={endAllCalls}
 				setIsRecording={setIsRecording}
 				isRecording={isRecording}
+				isUserAudioOn={isUserAudioOn}
+				setIsUserAudioOn={setIsUserAudioOn}
 			/>{" "}
 		</div>
 	)

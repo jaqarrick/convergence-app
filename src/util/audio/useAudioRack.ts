@@ -33,7 +33,9 @@ export default function useAudioRack(
 	roomAudioSettings: userSettingsObject[],
 	socket: any,
 	isRecording: boolean,
-	setIsRecording: (isRecording: boolean) => void
+	setIsRecording: (isRecording: boolean) => void,
+	isUserAudioOn: boolean,
+	setStream: (stream: MediaStream) => void
 ) {
 	const compressor = useMemo(() => new Tone.Compressor(), [])
 	const chorus = useMemo(() => {
@@ -105,7 +107,36 @@ export default function useAudioRack(
 			wet: wet?.value,
 		})
 	}, [roomAudioSettings])
+
+	const userVol = useMemo(
+		() =>
+			isUserAudioOn
+				? new Tone.Volume({ mute: false })
+				: new Tone.Volume({ mute: true }),
+		[isUserAudioOn]
+	)
+	const connectUserStream = useCallback(
+		(mediaStream: MediaStream) => {
+			console.log("connected")
+			const src = ac.createMediaStreamSource(mediaStream)
+			Tone.connect(src, userVol)
+			const dest = ac.createMediaStreamDestination()
+			Tone.connect(userVol, baseToneVol)
+			Tone.connect(userVol, dest)
+			setStream(dest.stream)
+		},
+		[setStream, baseToneVol, userVol]
+	)
+
 	const baseGain = useMemo(() => ac.createGain(), [])
+	const baseUserGain = useMemo(() => ac.createGain(), [])
+	const switchUserAudio = useCallback(
+		(isAudioOn: boolean) =>
+			isAudioOn
+				? (baseUserGain.gain.value = 2)
+				: (baseUserGain.gain.value = -30),
+		[baseUserGain]
+	)
 
 	const updateSetting = useCallback(
 		(
@@ -152,8 +183,18 @@ export default function useAudioRack(
 	useEffect(() => {
 		baseGain.gain.value = 2
 		Tone.connect(baseGain, compressor)
-	}, [baseGain, compressor, baseToneVol])
+	}, [baseGain, baseToneVol, compressor])
 
+	// const connectUserStream = useCallback(
+	// 	(stream: MediaStream) => {
+	// 		setConnected(true)
+	// 		const src = ac.createMediaStreamSource(stream)
+	// 		console.log(src)
+	// 		Tone.connect(src, baseUserGain)
+	// 		Tone.connect(baseUserGain, compressor)
+	// 	},
+	// 	[baseUserGain, setConnected]
+	// )
 	const connectStream = useCallback(
 		(stream: MediaStream) => {
 			const src = ac.createMediaStreamSource(stream)
@@ -173,7 +214,9 @@ export default function useAudioRack(
 	}, [isRecording])
 
 	return {
+		connectUserStream,
 		connectStream,
 		updateSetting,
+		switchUserAudio,
 	}
 }

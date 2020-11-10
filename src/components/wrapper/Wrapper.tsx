@@ -25,6 +25,8 @@ enum settingsName {
 	output = "OUTPUT",
 }
 interface Props {
+	isUserAudioOn: boolean
+	setIsUserAudioOn: (isUserAudioOn: boolean) => void
 	setIsRecording: (isRecording: boolean) => void
 	isRecording: boolean
 	enterSocketRoom: (
@@ -49,6 +51,8 @@ interface Props {
 	roomAudioSettings: userSettingsObject[]
 }
 const Wrapper: React.FC<Props> = ({
+	isUserAudioOn,
+	setIsUserAudioOn,
 	allRoomsData,
 	enterSocketRoom,
 	peerid,
@@ -79,6 +83,8 @@ const Wrapper: React.FC<Props> = ({
 							setRoomAudioSettings={setRoomAudioSettings}
 							roomid={roomid}
 							updateSetting={updateSetting}
+							isUserAudioOn={isUserAudioOn}
+							setIsUserAudioOn={setIsUserAudioOn}
 						/>
 					)}></Route>
 				<Route path='/welcome'>
