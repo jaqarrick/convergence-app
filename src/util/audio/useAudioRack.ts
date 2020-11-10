@@ -108,16 +108,24 @@ export default function useAudioRack(
 		})
 	}, [roomAudioSettings])
 
-	const userVol = useMemo(
-		() =>
-			isUserAudioOn
-				? new Tone.Volume({ mute: false })
-				: new Tone.Volume({ mute: true }),
-		[isUserAudioOn]
-	)
+	const [userVol, setUserVol] = useState<any>(new Tone.Volume({ mute: true }))
+
+	useEffect(() => {
+		if (isUserAudioOn) {
+			setUserVol((prevVol: any) => {
+				prevVol.disconnect()
+				return new Tone.Volume({ mute: false })
+			})
+		} else if (!isUserAudioOn) {
+			setUserVol((prevVol: any) => {
+				prevVol.disconnect()
+				return new Tone.Volume({ mute: true })
+			})
+		}
+	}, [setUserVol, isUserAudioOn])
+
 	const connectUserStream = useCallback(
 		(mediaStream: MediaStream) => {
-			console.log("connected")
 			const src = ac.createMediaStreamSource(mediaStream)
 			Tone.connect(src, userVol)
 			const dest = ac.createMediaStreamDestination()
