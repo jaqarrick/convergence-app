@@ -6,6 +6,7 @@ import {
 	userSettingsObject,
 } from "../../../../../types/userSettingsObject"
 import { NormalRange } from "tone/build/esm/core/type/Units"
+import SettingsInput from "./SettingInput"
 
 enum settingsGroup {
 	environment = "ENVIRONMENT",
@@ -48,8 +49,26 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateSetting }) => (
 								return (
 									<div key={paramsObject.id} className='param-container'>
 										<div className='param-name'> {paramsObject.paramName}</div>
-										<input
+										<SettingsInput
+											updateSetting={updateSetting}
+											value={
+												paramsObject.rangeAmount === "normal"
+													? paramsObject.value * 1000
+													: paramsObject.value
+											}
+											minVal={paramsObject.minVal}
+											maxVal={paramsObject.maxVal}
+											rangeAmount={paramsObject.rangeAmount}
+											settingsGroup={currentMenu.settingsGroup}
+											settingsName={audioOptionsObject.name}
+											paramName={paramsObject.paramName}
+										/>
+										{/* <input
 											type='range'
+											onMouseUp={(event: any) => {
+												const valueToUpdate = event.target.value
+												console.log(valueToUpdate)
+											}}
 											min={
 												paramsObject.rangeAmount === "normal"
 													? paramsObject.minVal * 1000
@@ -70,14 +89,14 @@ const SettingsDisplay: React.FC<Props> = ({ currentMenu, updateSetting }) => (
 													paramsObject.rangeAmount === "normal"
 														? Number(e.target.value) / 1000
 														: Number(e.target.value)
-												updateSetting(
-													currentMenu.settingsGroup,
-													audioOptionsObject.name,
-													paramsObject.paramName,
-													valueToUpdate
-												)
+												// updateSetting(
+												// 	currentMenu.settingsGroup,
+												// 	audioOptionsObject.name,
+												// 	paramsObject.paramName,
+												// 	valueToUpdate
+												// )
 											}}
-										/>
+										/> */}
 										<div className='param-value-container'>
 											<div className='param-value'>{paramsObject.value} </div>
 										</div>

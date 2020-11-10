@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import * as Tone from "tone"
-import { Chorus, Recorder, Signal } from "tone"
+import { ToneAudioNode } from "tone"
 import { NormalRange } from "tone/build/esm/core/type/Units"
 import {
 	userSettingsObject,
@@ -38,87 +38,115 @@ export default function useAudioRack(
 	setStream: (stream: MediaStream) => void
 ) {
 	const compressor = useMemo(() => new Tone.Compressor(), [])
-	const chorus = useMemo(() => {
-		const params = getParamsArray(
-			roomAudioSettings,
-			settingsGroup.effects,
-			settingsName.chorus
-		)
-		const wet: ParamsObject | undefined = params
-			? getParamsObject(params, "wet")
-			: undefined
-		const fr: ParamsObject | undefined = params
-			? getParamsObject(params, "frequency")
-			: undefined
-		const delayTime: ParamsObject | undefined = params
-			? getParamsObject(params, "delayTime")
-			: undefined
-		const depth: ParamsObject | undefined = params
-			? getParamsObject(params, "depth")
-			: undefined
 
-		return new Chorus({
-			wet: wet?.value,
-			frequency: fr?.value,
-			delayTime: delayTime?.value,
-			depth: depth?.value,
-		})
-	}, [roomAudioSettings])
-	const delay = useMemo(() => {
-		const params = getParamsArray(
-			roomAudioSettings,
-			settingsGroup.effects,
-			settingsName.delay
-		)
+	// const [chorus, setChorus] = useState<ToneAudioNode>(new Tone.Chorus())
 
-		const delayTime: ParamsObject | undefined = params
-			? getParamsObject(params, "delayTime")
-			: undefined
-		const wet: ParamsObject | undefined = params
-			? getParamsObject(params, "wet")
-			: undefined
-		const feedback: ParamsObject | undefined = params
-			? getParamsObject(params, "feedback")
-			: undefined
-		return new Tone.PingPongDelay({
-			delayTime: delayTime?.value,
-			feedback: feedback?.value,
-			wet: wet?.value,
-		})
-	}, [roomAudioSettings])
+	//update chorus on update settings
+	// useEffect(
+	// 	() =>
+	// 		setChorus((prevChorus: ToneAudioNode) => {
+	// 			prevChorus.dispose()
+	// 			const params = getParamsArray(
+	// 				roomAudioSettings,
+	// 				settingsGroup.effects,
+	// 				settingsName.chorus
+	// 			)
+	// 			const wet: ParamsObject | undefined = params
+	// 				? getParamsObject(params, "wet")
+	// 				: undefined
+	// 			const fr: ParamsObject | undefined = params
+	// 				? getParamsObject(params, "frequency")
+	// 				: undefined
+	// 			const delayTime: ParamsObject | undefined = params
+	// 				? getParamsObject(params, "delayTime")
+	// 				: undefined
+	// 			const depth: ParamsObject | undefined = params
+	// 				? getParamsObject(params, "depth")
+	// 				: undefined
+
+	// 			return new Tone.Chorus({
+	// 				wet: wet?.value,
+	// 				frequency: fr?.value,
+	// 				delayTime: delayTime?.value,
+	// 				depth: depth?.value,
+	// 			})
+	// 		}),
+	// 	[roomAudioSettings, setChorus]
+	// )
+
+	const [delay, setDelay] = useState<ToneAudioNode>(new Tone.PingPongDelay())
+
+	//update delay on update settings
+	useEffect(
+		() =>
+			setDelay((prevDelay: ToneAudioNode) => {
+				prevDelay.dispose()
+				const params = getParamsArray(
+					roomAudioSettings,
+					settingsGroup.effects,
+					settingsName.delay
+				)
+
+				const delayTime: ParamsObject | undefined = params
+					? getParamsObject(params, "delayTime")
+					: undefined
+				const wet: ParamsObject | undefined = params
+					? getParamsObject(params, "wet")
+					: undefined
+				const feedback: ParamsObject | undefined = params
+					? getParamsObject(params, "feedback")
+					: undefined
+				return new Tone.PingPongDelay({
+					delayTime: delayTime?.value,
+					feedback: feedback?.value,
+					wet: wet?.value,
+				})
+			}),
+		[setDelay, roomAudioSettings]
+	)
 
 	const baseToneVol = useMemo(() => new Tone.Volume(), [])
-	const reverb = useMemo(() => {
-		const params = getParamsArray(
-			roomAudioSettings,
-			settingsGroup.environment,
-			settingsName.reverb
-		)
 
-		const decay: ParamsObject | undefined = params
-			? getParamsObject(params, "decay")
-			: undefined
+	const [reverb, setReverb] = useState<ToneAudioNode>(new Tone.Reverb())
+	//update reverb on change settings
+	useEffect(
+		() =>
+			setReverb((prevReverb: ToneAudioNode) => {
+				prevReverb.dispose()
+				const params = getParamsArray(
+					roomAudioSettings,
+					settingsGroup.environment,
+					settingsName.reverb
+				)
+				const decay: ParamsObject | undefined = params
+					? getParamsObject(params, "decay")
+					: undefined
 
-		const wet: ParamsObject | undefined = params
-			? getParamsObject(params, "wet")
-			: undefined
-		return new Tone.Reverb({
-			decay: decay?.value,
-			wet: wet?.value,
-		})
-	}, [roomAudioSettings])
+				const wet: ParamsObject | undefined = params
+					? getParamsObject(params, "wet")
+					: undefined
+				return new Tone.Reverb({
+					decay: decay?.value,
+					wet: wet?.value,
+				})
+			}),
 
-	const [userVol, setUserVol] = useState<any>(new Tone.Volume({ mute: true }))
+		[roomAudioSettings, getParamsArray, getParamsObject]
+	)
+
+	const [userVol, setUserVol] = useState<ToneAudioNode>(
+		new Tone.Volume({ mute: true })
+	)
 
 	useEffect(() => {
 		if (isUserAudioOn) {
-			setUserVol((prevVol: any) => {
-				prevVol.disconnect()
+			setUserVol((prevVol: ToneAudioNode) => {
+				prevVol.dispose()
 				return new Tone.Volume({ mute: false })
 			})
 		} else if (!isUserAudioOn) {
 			setUserVol((prevVol: any) => {
-				prevVol.disconnect()
+				prevVol.dispose()
 				return new Tone.Volume({ mute: true })
 			})
 		}
@@ -178,31 +206,23 @@ export default function useAudioRack(
 			),
 		[setRoomAudioSettings]
 	)
-	useEffect(() => console.log(delay), [delay])
+	// useEffect(() => console.log(chorus), [chorus])
 	useEffect(() => {
 		Tone.connect(compressor, baseToneVol)
-		Tone.connect(baseToneVol, chorus)
-		Tone.connect(chorus, delay)
+		// Tone.connect(baseToneVol, chorus)
+		Tone.connect(baseToneVol, delay)
+		// Tone.connect(chorus, delay)
 		baseToneVol.mute = false
 		Tone.connect(delay, reverb)
 		Tone.connect(reverb, ac.destination)
 		// reverb.fan(ac.destination, ac.destination)
-	}, [compressor, reverb, delay, baseToneVol, chorus])
+	}, [compressor, reverb, delay, baseToneVol])
+
 	useEffect(() => {
 		baseGain.gain.value = 2
 		Tone.connect(baseGain, compressor)
 	}, [baseGain, baseToneVol, compressor])
 
-	// const connectUserStream = useCallback(
-	// 	(stream: MediaStream) => {
-	// 		setConnected(true)
-	// 		const src = ac.createMediaStreamSource(stream)
-	// 		console.log(src)
-	// 		Tone.connect(src, baseUserGain)
-	// 		Tone.connect(baseUserGain, compressor)
-	// 	},
-	// 	[baseUserGain, setConnected]
-	// )
 	const connectStream = useCallback(
 		(stream: MediaStream) => {
 			const src = ac.createMediaStreamSource(stream)
