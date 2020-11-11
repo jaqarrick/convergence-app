@@ -35,14 +35,14 @@ const SettingsButtons: React.FC<Props> = ({
 					<img src={AudioOffButton} alt='audio off button' />
 				)}
 			</div>
-			<div
+			{/* <div
 				onClick={() => setIsConverging(!isConverging)}
 				className={
 					isConverging ? "settings-button converging-active" : "settings-button"
 				}>
 				{" "}
 				<img src={ConvergeButton} alt='converge button'></img>
-			</div>
+			</div> */}
 			<div
 				onClick={() => setIsRecording(!isRecording)}
 				className={

@@ -44,7 +44,7 @@ const App: React.FC = () => {
 	const [allRoomsData, setAllRoomsData] = useState<RoomDataObject[] | null>([])
 	const [currentPeers, setCurrentPeers] = useState<Set<string>>()
 	const [isRecording, setIsRecording] = useState<boolean>(false)
-	const [isUserAudioOn, setIsUserAudioOn] = useState<boolean>(false)
+	const [isUserAudioOn, setIsUserAudioOn] = useState<boolean>(true)
 
 	//event fired whenever all rooms are updated
 	const updateAllRoomsData = useCallback(

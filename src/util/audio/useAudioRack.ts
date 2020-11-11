@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import * as Tone from "tone"
 import { ToneAudioNode } from "tone"
 import { NormalRange } from "tone/build/esm/core/type/Units"
+import download from "downloadjs"
 import {
 	userSettingsObject,
 	audioOption,
@@ -37,7 +38,7 @@ export default function useAudioRack(
 	isUserAudioOn: boolean,
 	setStream: (stream: MediaStream) => void
 ) {
-	const compressor = useMemo(() => new Tone.Compressor(), [])
+	const compressor = useMemo(() => new Tone.Compressor(-20, 4), [])
 
 	// const [chorus, setChorus] = useState<ToneAudioNode>(new Tone.Chorus())
 
@@ -131,7 +132,7 @@ export default function useAudioRack(
 				})
 			}),
 
-		[roomAudioSettings, getParamsArray, getParamsObject]
+		[roomAudioSettings]
 	)
 
 	const [userVol, setUserVol] = useState<ToneAudioNode>(
@@ -142,6 +143,7 @@ export default function useAudioRack(
 		if (isUserAudioOn) {
 			setUserVol((prevVol: ToneAudioNode) => {
 				prevVol.dispose()
+
 				return new Tone.Volume({ mute: false })
 			})
 		} else if (!isUserAudioOn) {
@@ -207,6 +209,63 @@ export default function useAudioRack(
 		[setRoomAudioSettings]
 	)
 	// useEffect(() => console.log(chorus), [chorus])
+	const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>()
+
+	const startRecording = useCallback(() => {
+		if (mediaRecorder) {
+			mediaRecorder.start()
+			console.log("started")
+		}
+	}, [mediaRecorder])
+
+	const stopRecording = useCallback(() => {
+		if (mediaRecorder) {
+			mediaRecorder.stop()
+			console.log("stopped")
+		}
+	}, [mediaRecorder])
+
+	const downloadAudio = useCallback((data: BlobPart[]) => {
+		const blob = new Blob(data, {
+			type: "audio/wav; codecs=MS_PCM",
+		})
+		console.log(blob)
+		download(blob, "converge.wav", "audio/wav")
+	}, [])
+	const createRecording = useCallback(
+		e => {
+			let chunks = []
+			chunks.push(e.data)
+			downloadAudio(chunks)
+		},
+		[downloadAudio]
+	)
+	useEffect(() => {
+		mediaRecorder?.addEventListener("dataavailable", createRecording)
+	}, [mediaRecorder, createRecording])
+
+	useEffect(() => {
+		if (isRecording) {
+			startRecording()
+			console.log("recording started")
+		}
+		if (!isRecording) {
+			stopRecording()
+			console.log("recording stopped")
+		}
+	}, [isRecording, startRecording, stopRecording])
+
+	const masterLimiter = useMemo(() => new Tone.Limiter(-10), [])
+
+	const [hasCompletedChain, setHasCompletedChain] = useState<boolean>(false)
+	const completeChain = useCallback(() => {
+		if (!hasCompletedChain) {
+			const recordingDestination: MediaStreamAudioDestinationNode = ac.createMediaStreamDestination()
+			masterLimiter.fan(ac.destination, recordingDestination)
+			console.log("connected to media recorder")
+			setMediaRecorder(new MediaRecorder(recordingDestination.stream))
+		}
+	}, [hasCompletedChain, setMediaRecorder, masterLimiter])
 	useEffect(() => {
 		Tone.connect(compressor, baseToneVol)
 		// Tone.connect(baseToneVol, chorus)
@@ -214,9 +273,10 @@ export default function useAudioRack(
 		// Tone.connect(chorus, delay)
 		baseToneVol.mute = false
 		Tone.connect(delay, reverb)
-		Tone.connect(reverb, ac.destination)
-		// reverb.fan(ac.destination, ac.destination)
-	}, [compressor, reverb, delay, baseToneVol])
+		Tone.connect(reverb, masterLimiter)
+		setHasCompletedChain(true)
+		completeChain()
+	}, [completeChain, compressor, reverb, delay, baseToneVol, masterLimiter])
 
 	useEffect(() => {
 		baseGain.gain.value = 2
