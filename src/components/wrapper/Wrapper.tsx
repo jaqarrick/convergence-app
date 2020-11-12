@@ -89,6 +89,7 @@ const Wrapper: React.FC<Props> = ({
 					)}></Route>
 				<Route path='/welcome'>
 					<Welcome
+						roomid={roomid}
 						allRoomsData={allRoomsData}
 						enterSocketRoom={enterSocketRoom}
 						peerid={peerid}

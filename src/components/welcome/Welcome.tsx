@@ -9,19 +9,21 @@ interface Props {
 	allRoomsData: RoomDataObject[] | null
 	peerid: string | null
 	enterSocketRoom: (roomid: string | null, peerid: string | null) => void
+	roomid: string | null | undefined
 }
 const Welcome: React.FC<Props> = ({
 	enterSocketRoom,
 	peerid,
+	roomid,
 	allRoomsData,
 }) => {
 	return (
 		<div className='welcome-container'>
 			<div className={"text-banner-container upper-container"}>
-				<TextBanner direction={"left"} />
+				<TextBanner roomid={roomid} direction={"left"} />
 			</div>
 			<div className={"text-banner-container lower-container"}>
-				<TextBanner direction={"right"} />
+				<TextBanner roomid={roomid} direction={"right"} />
 			</div>
 			<Wave numberOfPeers={1} />
 			<div className='room-data-container'>

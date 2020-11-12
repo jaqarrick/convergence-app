@@ -167,6 +167,7 @@ const App: React.FC = () => {
 	}, [allCalls])
 	useEffect(() => {
 		peer.on("call", (call: any) => {
+			console.log("call received")
 			if (stream) {
 				setAllCalls(prev => [...prev, call])
 				call.answer(stream)
