@@ -34,7 +34,6 @@ if (window.location.protocol === "https:") {
 
 console.log(window.location.protocol)
 console.log(window.location.port)
-const audioCtx = new AudioContext()
 
 const App: React.FC = () => {
 	const history = useHistory()
@@ -92,18 +91,11 @@ const App: React.FC = () => {
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => console.log(connected), [connected])
-	const {
-		connectUserStream,
-		connectStream,
-		updateSetting,
-		switchUserAudio,
-	} = useAudioRack(
-		setConnected,
+	const { connectUserStream, connectStream, updateSetting } = useAudioRack(
 		setRoomAudioSettings,
 		roomAudioSettings,
 		socket,
 		isRecording,
-		setIsRecording,
 		isUserAudioOn,
 		setStream
 	)
@@ -120,33 +112,30 @@ const App: React.FC = () => {
 	})
 
 	//updates current peers
-	useEffect(
-		() =>
+	useEffect(() => {
+		const allPeersInRoom: Set<string> | undefined = allRoomsData?.find(
+			(object: RoomDataObject) => object.roomid === roomid
+		)?.peerids
+		if (allPeersInRoom) {
 			setCurrentPeers(
-				allRoomsData?.find((object: RoomDataObject) => object.roomid === roomid)
-					?.peerids
-			),
-		[allRoomsData, roomid, setCurrentPeers]
-	)
-
+				new Set(
+					[...allPeersInRoom].filter((peerId: string) => peerId !== myPeerId)
+				)
+			)
+		}
+	}, [allRoomsData, roomid, setCurrentPeers, myPeerId])
+	useEffect(() => console.log(currentPeers), [currentPeers])
 	//initiates the client's media stream
 	const initUserAudio = useCallback(async () => {
 		let newStream: null | MediaStream = null
 		try {
 			newStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-			// setStream(newStream)
+			setStream(newStream)
 			connectUserStream(newStream)
 		} catch (err) {
 			throw err
 		}
 	}, [setStream, connectUserStream])
-
-	// useEffect(() => {
-	// 	//connects user stream to rack
-	// 	if (stream) {
-	// 		connectUserStream(stream)
-	// 	}
-	// }, [stream, connectStream])
 
 	// This initate getUserMedia fn above
 	useEffect(() => {
@@ -172,30 +161,28 @@ const App: React.FC = () => {
 				setAllCalls(prev => [...prev, call])
 				call.answer(stream)
 				call.on("stream", connectStream)
+				setConnected(true)
 			}
 		})
 	}, [stream, setConnected, connectStream, setAllCalls])
 
+	//calling function
 	useEffect(() => {
-		if (currentPeers && currentPeers.size <= 1 && roomid) {
-			console.log(currentPeers.size)
-		}
-		if (currentPeers && currentPeers.size > 1 && roomid) {
-			console.log(currentPeers)
+		//check if only person in room
+		if (currentPeers && currentPeers.size === 0 && roomid) {
+			console.log("you are the only peer in the room")
+			setConnected(true)
+		} else if (currentPeers && currentPeers.size >= 1 && roomid && !connected) {
+			console.log("the room size is greater than 1")
+			setConnected(true)
 			currentPeers?.forEach((id: string) => {
 				if (stream) {
 					console.log("init call!")
 					peer.call(id, stream)
-					const src: MediaStreamAudioSourceNode = audioCtx.createMediaStreamSource(
-						stream
-					)
-					const gain: GainNode = audioCtx.createGain()
-					src.connect(gain)
-					gain.connect(audioCtx.destination)
 				}
 			})
 		}
-	}, [currentPeers, connected, roomid, stream])
+	}, [currentPeers, connected, roomid, stream, setConnected])
 
 	return (
 		<div className='wrapper'>

@@ -48,7 +48,7 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({
 	useEffect(() => {
 		set_Direction(direction)
 		if (!roomid) {
-			animate()
+			// animate()
 		} else {
 			if (requestRef.current) cancelAnimationFrame(requestRef.current)
 		}

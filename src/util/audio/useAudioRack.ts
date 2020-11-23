@@ -29,51 +29,14 @@ const ac = new AudioContext()
 Tone.setContext(ac)
 
 export default function useAudioRack(
-	setConnected: (arg0: boolean) => void,
 	setRoomAudioSettings: any, //fix this
 	roomAudioSettings: userSettingsObject[],
 	socket: any,
 	isRecording: boolean,
-	setIsRecording: (isRecording: boolean) => void,
 	isUserAudioOn: boolean,
 	setStream: (stream: MediaStream) => void
 ) {
 	const compressor = useMemo(() => new Tone.Compressor(-20, 4), [])
-
-	// const [chorus, setChorus] = useState<ToneAudioNode>(new Tone.Chorus())
-
-	//update chorus on update settings
-	// useEffect(
-	// 	() =>
-	// 		setChorus((prevChorus: ToneAudioNode) => {
-	// 			prevChorus.dispose()
-	// 			const params = getParamsArray(
-	// 				roomAudioSettings,
-	// 				settingsGroup.effects,
-	// 				settingsName.chorus
-	// 			)
-	// 			const wet: ParamsObject | undefined = params
-	// 				? getParamsObject(params, "wet")
-	// 				: undefined
-	// 			const fr: ParamsObject | undefined = params
-	// 				? getParamsObject(params, "frequency")
-	// 				: undefined
-	// 			const delayTime: ParamsObject | undefined = params
-	// 				? getParamsObject(params, "delayTime")
-	// 				: undefined
-	// 			const depth: ParamsObject | undefined = params
-	// 				? getParamsObject(params, "depth")
-	// 				: undefined
-
-	// 			return new Tone.Chorus({
-	// 				wet: wet?.value,
-	// 				frequency: fr?.value,
-	// 				delayTime: delayTime?.value,
-	// 				depth: depth?.value,
-	// 			})
-	// 		}),
-	// 	[roomAudioSettings, setChorus]
-	// )
 
 	const [delay, setDelay] = useState<ToneAudioNode>(new Tone.PingPongDelay())
 
@@ -167,14 +130,6 @@ export default function useAudioRack(
 	)
 
 	const baseGain = useMemo(() => ac.createGain(), [])
-	const baseUserGain = useMemo(() => ac.createGain(), [])
-	const switchUserAudio = useCallback(
-		(isAudioOn: boolean) =>
-			isAudioOn
-				? (baseUserGain.gain.value = 2)
-				: (baseUserGain.gain.value = -30),
-		[baseUserGain]
-	)
 
 	const updateSetting = useCallback(
 		(
@@ -214,14 +169,12 @@ export default function useAudioRack(
 	const startRecording = useCallback(() => {
 		if (mediaRecorder) {
 			mediaRecorder.start()
-			console.log("started")
 		}
 	}, [mediaRecorder])
 
 	const stopRecording = useCallback(() => {
 		if (mediaRecorder) {
 			mediaRecorder.stop()
-			console.log("stopped")
 		}
 	}, [mediaRecorder])
 
@@ -229,7 +182,6 @@ export default function useAudioRack(
 		const blob = new Blob(data, {
 			type: "audio/wav; codecs=MS_PCM",
 		})
-		console.log(blob)
 		download(blob, "converge.wav", "audio/wav")
 	}, [])
 	const createRecording = useCallback(
@@ -247,11 +199,9 @@ export default function useAudioRack(
 	useEffect(() => {
 		if (isRecording) {
 			startRecording()
-			console.log("recording started")
 		}
 		if (!isRecording) {
 			stopRecording()
-			console.log("recording stopped")
 		}
 	}, [isRecording, startRecording, stopRecording])
 
@@ -262,7 +212,6 @@ export default function useAudioRack(
 		if (!hasCompletedChain) {
 			const recordingDestination: MediaStreamAudioDestinationNode = ac.createMediaStreamDestination()
 			masterLimiter.fan(ac.destination, recordingDestination)
-			console.log("connected to media recorder")
 			setMediaRecorder(new MediaRecorder(recordingDestination.stream))
 		}
 	}, [hasCompletedChain, setMediaRecorder, masterLimiter])
@@ -285,26 +234,16 @@ export default function useAudioRack(
 
 	const connectStream = useCallback(
 		(stream: MediaStream) => {
+			console.log("stream connecting")
 			const src = ac.createMediaStreamSource(stream)
-			console.log(src)
 			Tone.connect(src, baseGain)
-			setConnected(true)
 		},
-		[setConnected, baseGain]
+		[baseGain]
 	)
-
-	useEffect(() => console.log(isRecording), [isRecording])
-
-	//set up tone recorder
-
-	useEffect(() => {
-		console.log(isRecording)
-	}, [isRecording])
 
 	return {
 		connectUserStream,
 		connectStream,
 		updateSetting,
-		switchUserAudio,
 	}
 }

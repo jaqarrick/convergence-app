@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./Wrapper.css"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
 import Welcome from "../welcome/Welcome"
@@ -65,9 +65,10 @@ const Wrapper: React.FC<Props> = ({
 	setIsRecording,
 	isRecording,
 }) => {
-	const [isJoinRoomOptionsMenuOpen, setisJoinRoomOptionsMenuOpen] = useState<
-		boolean
-	>(false)
+	const [
+		isJoinRoomOptionsMenuOpen,
+		setisJoinRoomOptionsMenuOpen,
+	] = useState<boolean>(false)
 	return (
 		<div className='wrapper'>
 			<Switch>
