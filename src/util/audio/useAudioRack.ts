@@ -173,7 +173,7 @@ export default function useAudioRack(
 	}, [mediaRecorder])
 
 	const stopRecording = useCallback(() => {
-		if (mediaRecorder) {
+		if (mediaRecorder && mediaRecorder.state === "recording") {
 			mediaRecorder.stop()
 		}
 	}, [mediaRecorder])
