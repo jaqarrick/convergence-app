@@ -74,6 +74,9 @@ const App: React.FC = () => {
 		enterSocketRoom,
 		socket,
 	} = useSockets(onRoomUpdate, updateAllRoomsData, setRoomAudioSettings)
+	useEffect(() => {
+		socket.on("reset room", () => history.push("/welcome/"))
+	}, [socket, history])
 
 	useEffect(() => {
 		if (myPeerId) {
@@ -149,11 +152,13 @@ const App: React.FC = () => {
 	const [allCalls, setAllCalls] = useState<any[]>([])
 	//init call anytime peers change
 	const endAllCalls = useCallback(() => {
+		console.log("ended calls")
 		allCalls.forEach(call => {
 			call.close()
 		})
+		setConnected(false)
 		setAllCalls([])
-	}, [allCalls])
+	}, [allCalls, setConnected])
 	useEffect(() => {
 		peer.on("call", (call: any) => {
 			console.log("call received")
@@ -178,11 +183,19 @@ const App: React.FC = () => {
 			currentPeers?.forEach((id: string) => {
 				if (stream) {
 					console.log("init call!")
-					peer.call(id, stream)
+					const call = peer.call(id, stream)
+					call.on(
+						"stream",
+						(remoteStream: MediaStream) => {
+							console.log("retrieving local stream from call")
+							connectStream(remoteStream)
+						},
+						(err: Error) => console.log("Failed to get local stream", err)
+					)
 				}
 			})
 		}
-	}, [currentPeers, connected, roomid, stream, setConnected])
+	}, [currentPeers, connected, roomid, stream, connectStream, setConnected])
 
 	return (
 		<div className='wrapper'>

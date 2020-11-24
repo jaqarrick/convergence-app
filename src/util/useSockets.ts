@@ -11,7 +11,6 @@ const useSockets = (
 ) => {
 	// const socket = useMemo(() => io.connect(url), [url])
 	const socket = useMemo(() => io.connect(), [])
-
 	useEffect(() => {
 		socket.on("update socket room", onRoomUpdate)
 	}, [socket, onRoomUpdate])

@@ -92,7 +92,8 @@ const updateRooms = (
 				currentRoom.peerids.add(peerid)
 			}
 		} else {
-			throw "the current room can't be found... something went wrong"
+			socket.emit("reset room")
+			console.log("the current room can't be found... something went wrong")
 		}
 	}
 	//send the updated list of room data back to all clients connected
