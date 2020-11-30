@@ -114,6 +114,7 @@ const Wrapper: React.FC<Props> = ({
 					<div
 						onClick={() => {
 							if (peerid) {
+								console.log("entering a socket room")
 								enterSocketRoom(null, peerid)
 								if (roomid) {
 									leaveSocketRoom(roomid, peerid)

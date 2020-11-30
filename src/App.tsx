@@ -30,8 +30,11 @@ if (window.location.protocol === "https:") {
 		port: parseInt(window.location.port),
 		path: "/peerjs",
 	})
+	// peer = new Peer()
 }
 
+console.log(peer)
+console.log(window.location.hostname)
 console.log(window.location.protocol)
 console.log(window.location.port)
 
