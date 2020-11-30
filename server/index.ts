@@ -8,9 +8,7 @@ const PORT = normalizePort(process.env.PORT || 5000)
 const dev = app.get("env") !== "production"
 
 const server = new http.Server(app)
-const peerServer = ExpressPeerServer(server, {
-	path: "/peerjs",
-})
+const peerServer = ExpressPeerServer(server)
 app.use("/peerjs", peerServer)
 
 if (!dev) {
