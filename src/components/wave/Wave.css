@@ -1,0 +1,8 @@
+.wave-container {
+	width: 100vw;
+	position: absolute;
+	top: 50%;
+	height: 10rem;
+	height: auto;
+	/* border: solid red 1px; */
+}

@@ -33,7 +33,9 @@ if (window.location.protocol === "https:") {
 	// peer = new Peer()
 }
 
-console.log(peer)
+peer.on("connection", (conn: any) => {
+	console.log("peer connected!")
+})
 console.log(window.location.hostname)
 console.log(window.location.protocol)
 console.log(window.location.port)
@@ -97,7 +99,12 @@ const App: React.FC = () => {
 	useSocketEmitEffect("request room data")
 	const [connected, setConnected] = useState<Boolean>(false)
 	useEffect(() => console.log(connected), [connected])
-	const { connectUserStream, connectStream, updateSetting } = useAudioRack(
+	const {
+		connectUserStream,
+		connectStream,
+		updateSetting,
+		userAmpVal,
+	} = useAudioRack(
 		setRoomAudioSettings,
 		roomAudioSettings,
 		socket,
@@ -203,6 +210,7 @@ const App: React.FC = () => {
 	return (
 		<div className='wrapper'>
 			<Wrapper
+				userAmpVal={userAmpVal}
 				peerid={myPeerId}
 				roomid={roomid}
 				enterSocketRoom={enterSocketRoom}

@@ -1,12 +1,11 @@
-import "./Wave.css"
-import React, { useCallback, useEffect, useRef } from "react"
-// import s from "../../util/visual/sketch"
 import p5 from "p5"
 
-let canvasWidth = 1000
-let amplitude = 1
-
-const s = (sketch: any) => {
+const s = (
+	sketch: any,
+	amplitude = 5,
+	canvasWidth: number = 1000,
+	canvasHeight: number = 400
+) => {
 	let xspacing = 1 // Distance between each horizontal location
 	let w // Width of entire wave
 	let theta = 0.1 // Start angle at 0
@@ -16,7 +15,7 @@ const s = (sketch: any) => {
 	let yvalues: any // Using an array to store height values for the wave
 
 	sketch.setup = () => {
-		sketch.createCanvas(canvasWidth, 400) // constants for window height and width? resize(){}
+		sketch.createCanvas(canvasWidth, canvasHeight) // constants for window height and width? resize(){}
 		w = sketch.width + 16
 		dx = (sketch.TWO_PI / period) * xspacing
 		yvalues = new Array(Math.floor(w / xspacing))
@@ -24,7 +23,7 @@ const s = (sketch: any) => {
 
 	const renderWave = () => {
 		sketch.noStroke()
-		sketch.fill(0, 0, 0)
+		sketch.fill(150, 20, 200)
 		// A simple way to draw the wave with an ellipse at each location
 		for (let x = 0; x < yvalues.length; x++) {
 			// ellipse(x * xspacing, height / 2 + yvalues[x], 2, 2)
@@ -52,35 +51,4 @@ const s = (sketch: any) => {
 	}
 }
 
-interface Props {
-	numberOfPeers: number
-	userAmpVal: number
-}
-
-const Wave: React.FC<Props> = ({ numberOfPeers, userAmpVal }) => {
-	const requestRef = useRef<number>(0)
-	const waveRef = useRef<HTMLDivElement | null>(null)
-	const animate = useCallback(() => {
-		requestRef.current = requestAnimationFrame(animate)
-	}, [])
-
-	useEffect(() => {
-		amplitude = userAmpVal
-	}, [userAmpVal])
-	useEffect(() => {
-		if (waveRef.current) {
-			canvasWidth = window.innerWidth
-
-			new p5(s, waveRef.current)
-			console.log("sketch created")
-		}
-	}, [])
-
-	return (
-		<div className='wave-container'>
-			<div ref={waveRef}></div>
-		</div>
-	)
-}
-
-export default Wave
+export default s

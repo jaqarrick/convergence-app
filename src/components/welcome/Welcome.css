@@ -31,17 +31,17 @@
 	display: flex;
 	position: fixed;
 	top: 35%;
-	display: none;
+	display: block;
 }
-.wrapper .welcome-container .lower-container {
+/* .wrapper .welcome-container .lower-container {
 	top: 48%;
 	transform: skew(30deg);
-}
-
+} */
+/* 
 .wrapper .welcome-container .upper-container {
 	top: 40.5%;
 	transform: skew(30deg);
-}
+} */
 
 .wrapper .welcome-container .text-banner-container .text-container {
 	font-family: "steps-monoregular", Arial, Helvetica, sans-serif;

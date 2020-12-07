@@ -36,8 +36,10 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({
 			} else if (scaledFrame.current >= 28000) {
 				if (spanRef.current) spanRef.current.style.transform = `translateX(0px)`
 			}
-			if (spanRef.current)
+			if (spanRef.current) {
+				// console.log(scaledFrame.current)
 				spanRef.current.style.transform = `translateX(-${scaledFrame.current}px)`
+			}
 		} else if (_direction === "left") {
 			if (spanRef.current)
 				spanRef.current.style.transform = `translateX(${
@@ -48,7 +50,7 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({
 	useEffect(() => {
 		set_Direction(direction)
 		if (!roomid) {
-			// animate()
+			animate()
 		} else {
 			if (requestRef.current) cancelAnimationFrame(requestRef.current)
 		}
@@ -59,43 +61,7 @@ const TextTicker: React.FunctionComponent<TickerProps> = ({
 			<span>
 				make some noise make some noise make some noise make some noise make
 				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise make some noise
-				make some noise make some noise make some noise make some noise make
-				some noise make some noise make some noise make some noise make some
-				noise make some noise make some noise make some noise
+				noise make some noise make some noise
 			</span>
 		</div>
 	)

@@ -5,6 +5,7 @@ import Welcome from "../welcome/Welcome"
 import Room from "../room/Room"
 import MainLogo from "./logos/MAIN_LOGO.svg"
 import Info from "../info/Info"
+import Wave from "../../components/wave/Wave"
 // import roomData from "../../data/roomData"
 import { RoomDataObject } from "../../../types/RoomDataObject"
 import { userSettingsObject } from "../../../types/userSettingsObject"
@@ -25,6 +26,7 @@ enum settingsName {
 	output = "OUTPUT",
 }
 interface Props {
+	userAmpVal: number
 	isUserAudioOn: boolean
 	setIsUserAudioOn: (isUserAudioOn: boolean) => void
 	setIsRecording: (isRecording: boolean) => void
@@ -64,6 +66,7 @@ const Wrapper: React.FC<Props> = ({
 	endAllCalls,
 	setIsRecording,
 	isRecording,
+	userAmpVal,
 }) => {
 	const [
 		isJoinRoomOptionsMenuOpen,
@@ -104,6 +107,7 @@ const Wrapper: React.FC<Props> = ({
 					<Redirect to='/welcome'></Redirect>
 				</Route>
 			</Switch>
+			<Wave numberOfPeers={1} userAmpVal={userAmpVal} />
 			<div className='logo-container'>
 				<div
 					className={

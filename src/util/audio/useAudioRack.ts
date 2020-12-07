@@ -9,6 +9,7 @@ import {
 	ParamsObject,
 } from "../../../types/userSettingsObject"
 import { getParamsArray, getParamsObject } from "../getParams"
+import { MeterBase } from "tone/build/esm/component/analysis/MeterBase"
 
 enum settingsGroup {
 	environment = "ENVIRONMENT",
@@ -117,16 +118,26 @@ export default function useAudioRack(
 		}
 	}, [setUserVol, isUserAudioOn])
 
+	const [userMeter] = useState<any>(new Tone.Meter())
+	const [userAmpVal, setUserAmpVal] = useState<number>(10)
+	// useEffect(() => {
+	// 	setInterval(() => {
+	// 		setUserAmpVal(
+	// 			userMeter.getValue() < -35 ? 5 : 70 + userMeter.getValue() * 2
+	// 		)
+	// 	}, 100)
+	// }, [setUserAmpVal])
+
 	const connectUserStream = useCallback(
 		(mediaStream: MediaStream) => {
 			const src = ac.createMediaStreamSource(mediaStream)
 			Tone.connect(src, userVol)
 			const dest = ac.createMediaStreamDestination()
-			Tone.connect(userVol, baseToneVol)
+			userVol.fan(userMeter, baseToneVol)
 			Tone.connect(userVol, dest)
 			setStream(dest.stream)
 		},
-		[setStream, baseToneVol, userVol]
+		[setStream, baseToneVol, userVol, userMeter]
 	)
 
 	const baseGain = useMemo(() => ac.createGain(), [])
@@ -245,5 +256,6 @@ export default function useAudioRack(
 		connectUserStream,
 		connectStream,
 		updateSetting,
+		userAmpVal,
 	}
 }
