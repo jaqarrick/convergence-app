@@ -185,6 +185,7 @@ const App: React.FC = () => {
 	useEffect(() => {
 		//check if only person in room
 		if (currentPeers && currentPeers.size === 0 && roomid) {
+			// do i need this?
 			console.log("you are the only peer in the room")
 			setConnected(true)
 		} else if (currentPeers && currentPeers.size >= 1 && roomid && !connected) {

@@ -188,7 +188,7 @@ const Wrapper: React.FC<Props> = ({
 					alt='main logo'
 				/>
 			</div>
-			<Info />
+			<Info roomid={roomid} />
 		</div>
 	)
 }

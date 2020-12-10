@@ -59,7 +59,7 @@ const updateRooms = (
 			peerids: new Set([peerid]),
 		}
 
-		//compare and swap
+		//compare and swap //TODO
 		const CAS = (roomObject: RoomDataObject, roomState: RoomStateObject) => {
 			const prevRoomState = roomState.rooms
 			const newRoomState = [...prevRoomState, roomObject]

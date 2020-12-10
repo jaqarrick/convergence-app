@@ -98,15 +98,6 @@ const Room: React.FC<PassedProps & RouteProps> = ({
 				currentMenu={currentMenu}
 				updateSetting={updateSetting}
 			/>
-			<h5
-				style={{
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-				}}>
-				{" "}
-				{roomid}{" "}
-			</h5>
 		</div>
 	)
 }
