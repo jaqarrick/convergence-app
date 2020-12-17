@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
+import adapter from "webrtc-adapter"
 import Peer from "peerjs"
 import "./App.css"
 import Wrapper from "./components/wrapper/Wrapper"
@@ -33,6 +34,7 @@ if (window.location.protocol === "https:") {
 	// peer = new Peer()
 }
 
+console.log(peer)
 peer.on("connection", (conn: any) => {
 	console.log("peer connected!")
 })
@@ -123,6 +125,8 @@ const App: React.FC = () => {
 			setMyPeerId(id)
 		})
 	})
+
+	useEffect(() => console.log(`my peer id is: ${myPeerId}`), [myPeerId])
 
 	//updates current peers
 	useEffect(() => {
