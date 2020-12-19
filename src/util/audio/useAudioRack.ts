@@ -5,11 +5,10 @@ import { NormalRange } from "tone/build/esm/core/type/Units"
 import download from "downloadjs"
 import {
 	userSettingsObject,
-	audioOption,
 	ParamsObject,
+	audioOption,
 } from "../../../types/userSettingsObject"
 import { getParamsArray, getParamsObject } from "../getParams"
-import { MeterBase } from "tone/build/esm/component/analysis/MeterBase"
 
 enum settingsGroup {
 	environment = "ENVIRONMENT",
@@ -119,7 +118,7 @@ export default function useAudioRack(
 	}, [setUserVol, isUserAudioOn])
 
 	const [userMeter] = useState<any>(new Tone.Meter())
-	const [userAmpVal, setUserAmpVal] = useState<number>(10)
+	const [userAmpVal] = useState<number>(10)
 	// useEffect(() => {
 	// 	setInterval(() => {
 	// 		setUserAmpVal(
@@ -130,6 +129,12 @@ export default function useAudioRack(
 
 	const connectUserStream = useCallback(
 		(mediaStream: MediaStream) => {
+			let a: HTMLAudioElement | null = new Audio()
+			a.muted = true
+			a.srcObject = mediaStream
+			a.addEventListener("canplaythrough", () => {
+				a = null
+			})
 			const src = ac.createMediaStreamSource(mediaStream)
 			Tone.connect(src, userVol)
 			const dest = ac.createMediaStreamDestination()
@@ -246,6 +251,12 @@ export default function useAudioRack(
 	const connectStream = useCallback(
 		(stream: MediaStream) => {
 			console.log("stream connecting")
+			let a: HTMLAudioElement | null = new Audio()
+			a.muted = true
+			a.srcObject = stream
+			a.addEventListener("canplaythrough", () => {
+				a = null
+			})
 			const src = ac.createMediaStreamSource(stream)
 			Tone.connect(src, baseGain)
 		},
